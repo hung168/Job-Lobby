@@ -1,0 +1,31 @@
+.bg-white {
+  background-color: white;
+}
+
+.bg-theme-color {
+  background-color: #2E94B9; /* This sets the background color to the specified color. */
+}
+
+.blue-border {
+  border: 2px solid #2E94B9;
+}
+
+.button-hover-background-color {
+  background-color: white; /* Set the initial background color */
+  color: black; /* Set the initial text color */
+  transition: background-color 0.3s; /* Add a smooth color transition for the hover effect */
+}
+
+.button-hover-background-color:hover {
+  background-color: #2E94B9; /* Change the background color to #2E94B9 on hover */
+  color: white; /* Change the text color to white on hover */
+}
+
+.text-hover-color {
+  color: initial-color; /* Set the initial text color */
+  transition: color 0.3s; /* Add a smooth color transition for the hover effect */
+}
+
+.text-hover-color:hover {
+  color: white; /* Change the text color to white on hover */
+}
