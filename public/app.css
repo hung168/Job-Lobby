@@ -3,7 +3,20 @@
 }
 
 .bg-theme-color {
-  background-color: #2E94B9; /* This sets the background color to the specified color. */
+  background-color: #2E94B9 !important;; /* Set the background color to the specified color. */
+}
+
+.bg-theme-color:hover {
+  background-color: #298baf !important;; /* Set the background color to the specified color. */
+}
+
+.custom-shadow {
+  box-shadow: 2px 2px 4px rgba(41, 139, 175, 0.2); /* Set the shadow color to #298baf */
+}
+
+
+.text-theme-color {
+  color: #2E94B9 !important;; /* Set the background color to the specified color. */
 }
 
 .blue-border {
@@ -12,7 +25,7 @@
 
 .button-hover-background-color {
   background-color: white; /* Set the initial background color */
-  color: black; /* Set the initial text color */
+  color: #2E94B9; /* Set the initial text color */
   transition: background-color 0.3s; /* Add a smooth color transition for the hover effect */
 }
 

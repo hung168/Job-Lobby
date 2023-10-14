@@ -1,4 +1,4 @@
-<x-basic-layout style="margin-bottom: 0">
+<x-basic-layout>
     <div class="bg-gray-100 flex justify-center items-center h-screen">
             <!-- Left: Image -->
         <div class="w-1/2 h-screen hidden lg:block">
@@ -6,7 +6,8 @@
         </div>
         <!-- Right: Login Form -->
         <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-            <h1 class="text-2xl font-semibold mb-4">Login</h1>
+            <h1 class="text-4xl text-theme-color font-semibold mb-2">Login</h1>
+                <p class="mb-4 font-semibold">Sign in as employer or jobseeker</p>
             <form method="POST" action="/users/authenticate">
                 @csrf
                 
@@ -26,10 +27,10 @@
                 <button type="submit" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
             </form>
         <!-- Sign up  Link -->
-        <div class="mt-8">
+        <div class="mt-2">
             <p>
                 Don't have an account?
-                <a href="/" class="text-laravel"
+                <a href="/" class="text-laravel font-semibold"
                     >Register</a
                 >
             </p>

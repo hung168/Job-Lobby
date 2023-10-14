@@ -2,7 +2,9 @@
 @include('partials._hero')
 @include('partials._search')
 
-    <div class="lg:grid lg:grid-cols-2 gap-4 space-y-4 md:space-y-0 mx-4">
+
+
+    <div class="lg:grid lg:grid-cols-2 space-y-4 md:space-y-0 mx-80">
     @unless (count($listings) == 0)
 
     @foreach ($listings as $listing)
@@ -15,7 +17,7 @@
 
     </div>
 
-    <div class="mt-6 pd4">
+    <div class="mt-6">
         {{$listings->links()}}
     </div>
 </x-layout>

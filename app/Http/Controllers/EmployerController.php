@@ -25,6 +25,9 @@ class EmployerController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
+        $firstTimeLogin = $request->input('firstTimeLogin', 'No'); // Default to 'No' if not present
+
+
         //Hash password
         $formFields['password'] = bcrypt($formFields['password']);
         $formFields['user_type'] = 'Employer';
@@ -45,8 +48,11 @@ class EmployerController extends Controller
         //Login
         auth()->login($user);
 
-        return redirect("/editProfile/{{$newUserName}}/Employer")->with('message', 'User created and logged in');
-    }
+
+        return redirect("/editProfile/{$newUserName}/Employer")
+            ->with('message', 'User created and logged in')
+            ->with('firstTimeLogin', $firstTimeLogin);
+        }
 
     //Show job seeker profile edit page
     public function editProfile()

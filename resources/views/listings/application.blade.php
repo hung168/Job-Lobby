@@ -1,4 +1,6 @@
-<x-layout>
+<x-basic-layout>
+    @include('partials._jobseekernavbar')
+
     <x-card class="!p-10">
         <header>
             <h1 class="text-3xl text-center font-bold my-6 uppercase">
@@ -38,4 +40,4 @@
             </tbody>
         </table>
     </x-card>
-</x-layout>
+</x-basic-layout>

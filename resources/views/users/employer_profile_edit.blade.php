@@ -1,5 +1,7 @@
-<x-layout>
-    <x-card class="!p-10 !max-w-lg !mx-auto !mt-24">
+<x-basic-layout>
+    @include('partials._employernavbar')
+
+    <x-card class="!p-10 !max-w-lg !mx-auto !mt-24 rounded-xl shadow-md mb-20">
 
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
@@ -93,6 +95,6 @@
 
         </form>
     </x-card>
-</x-layout>
+</x-basic-layout>
 
 

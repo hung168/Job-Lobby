@@ -43,7 +43,7 @@ Route::delete('/listings/{listing}', [ListingController::class, 'delete'])->midd
 Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware('auth');
 
 //Apply listing
-Route::post('/{listing}/apply', [ListingController::class, 'apply']);
+Route::post('/{listing}/apply', [ListingController::class, 'apply'])->middleware('auth');
 
 //Application listings
 Route::get('/listings/applications', [ListingController::class, 'showApplicationList'])->middleware('auth');

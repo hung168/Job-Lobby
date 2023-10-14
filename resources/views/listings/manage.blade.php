@@ -1,4 +1,6 @@
-<x-layout>
+<x-basic-layout>
+    @include('partials._employernavbar')
+
     <x-card class="!p-10">
         <header>
             <h1
@@ -40,4 +42,4 @@
             </tbody>
         </table>
     </x-card>
-</x-layout>
+</x-basic-layout>

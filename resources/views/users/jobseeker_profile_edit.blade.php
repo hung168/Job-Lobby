@@ -1,4 +1,6 @@
-<x-layout>
+<x-basic-layout>
+    @include('partials._jobseekernavbar')
+
     <x-card class="!p-10 !max-w-lg !mx-auto !mt-24">
 
         <header class="text-center">
@@ -98,7 +100,7 @@
 
         </form>
     </x-card>
-</x-layout>
+</x-basic-layout>
 
 <script>
     // Function to add a new job experience input fields
