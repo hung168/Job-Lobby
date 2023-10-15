@@ -26,15 +26,20 @@
                 <!-- Login Button -->
                 <button type="submit" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
             </form>
-        <!-- Sign up  Link -->
-        <div class="mt-2">
-            <p>
-                Don't have an account?
-                <a href="/" class="text-laravel font-semibold"
-                    >Register</a
-                >
-            </p>
-        </div>
+            <!-- Sign up  Link -->
+            <div class="mt-2">
+                <p>
+                    Don't have an account?
+                    <a href="/" class="text-laravel font-semibold"
+                        >Register</a
+                    >
+                </p>
+            </div>
         </div>
     </div>
+    @if(session('message'))
+        <div x-data="{show: true}" x-init="setTimeout(()=>show = false, 3000)">
+            {{ session('message') }}
+        </div>
+    @endif
 </x-basic-layout>

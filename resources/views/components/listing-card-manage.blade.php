@@ -9,7 +9,7 @@
                 </figure>
             </div>
             <div class="w-full space-y-4 flex flex-col justify-center items-center">
-                <div class="flex flex-col justify-center">
+                <div class="flex flex-col justify-center">  
                     <h1 class="text-center md:text-left text-2xl font-bold text-gray-900"><a>{{$listing->title}}</a></h1>
                     <p class="inline text-center text-gray-700 font-normal leading-6 w-full text-base pt-2">{{$listing->company}}</p>
                 </div>
@@ -21,15 +21,11 @@
                 <ul class="space-x-4 flex flex-row justify-center w-full mb-4">
                     <x-listing-categories :tagsCsv="$listing->tags"/>
                 </ul>
-                <ul class="w-full ">
-                    <form method="POST" action="{{ url('/' . $listing->id . '/apply') }}" >
-                        @csrf
-                        <div>
-                            <button class="transition-colors bg-theme-color hover:bg-theme-color p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
-                                Apply
-                            </button>
-                        </div>
-                    </form>                
+                
+                <ul class="space-x-4 flex flex-row justify-center w-full mb-4">
+                    <a href="/listings/{{$listing['id']}}/edit" class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">
+                        Edit
+                    </a>                
                 </ul>
             </div>
         </div>

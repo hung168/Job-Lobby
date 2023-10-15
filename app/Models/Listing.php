@@ -9,7 +9,7 @@ class Listing extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'company', 'employer_user_id','location','logo', 'website', 'email', 'description', 'tags'];
+    protected $fillable = ['id','title', 'company', 'employer_user_id','location','logo', 'website', 'email', 'description', 'tags'];
 
     public function scopeFilter($query, array $filters){
         if($filters['tag'] ?? false) {
@@ -29,5 +29,7 @@ class Listing extends Model
     public function employer(){
         return $this->belongsTo(Employer::class,'employer_user_id');
     }
+
+
 
 }

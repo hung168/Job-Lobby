@@ -23,7 +23,9 @@ class UserController extends Controller
 
     //Logout user
     public function login(Request $request){
-        return view('users.login');
+        $message = session('message');
+
+        return view('users.login', ['message' => $message]);
     }
 
     //authenticate user

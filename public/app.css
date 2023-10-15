@@ -42,3 +42,11 @@
 .text-hover-color:hover {
   color: white; /* Change the text color to white on hover */
 }
+
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}

@@ -39,8 +39,8 @@
     <body>
         <main>
         {{$slot}}
+            <x-flash-message/>
         </main>
-        <x-flash-message/>
     </body>
 </html>
 

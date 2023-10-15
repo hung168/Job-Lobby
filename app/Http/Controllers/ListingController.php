@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\UserListing;
 use App\Models\Employer;
+use Illuminate\Support\Facades\Auth;
 
 
 class ListingController extends Controller
@@ -26,6 +27,12 @@ class ListingController extends Controller
         return view('listings.show', [
             'listing' => $listing
         ]);
+    }
+
+    //Show single listing
+    public function retrieveSingleListingData($id) {
+        $listing = Listing::find($id);
+        return response()->json($listing);
     }
 
     public function create() {
@@ -101,7 +108,7 @@ class ListingController extends Controller
         // Check if the user is of type 'Employer'
         if ($user->user_type === 'Employer') {
             // Retrieve the listings associated with the employer
-            $listings = Listing::where('employer_user_id', $user->id)->get()->toArray();
+            $listings = Listing::where('employer_user_id', $user->id)->get();
         
             return view('listings.manage', compact('listings'));
         }
@@ -122,7 +129,6 @@ class ListingController extends Controller
         if ($user->user_type === 'Job Seeker') {
             // Retrieve the job applications associated with the job seeker
             $applications = UserListing::where('user_id', $user->id)->with('listing')->get();
-            
             return view('listings.application', compact('applications'));
         }
     
@@ -135,17 +141,23 @@ class ListingController extends Controller
 
     public function apply(Request $request, $listing)
     {
-
-        // Create a new job application using the create() method
-        UserListing::create([
-            'user_id' => auth()->user()->id,
-            'listing_id' => $listing,
-            'status' => "Job Application In Review",
-        ]);
+        // Check if the user is authenticated (signed in)
+        if (Auth::check()) {
+            // User is signed in, proceed with the job application
     
-        // Redirect with a success message
-        return redirect('/')->with('message', 'Your job application has been submitted.');
-
+            // Create a new job application using the create() method
+            UserListing::create([
+                'user_id' => auth()->user()->id,
+                'listing_id' => $listing,
+                'status' => "Job Application In Review",
+            ]);
+    
+            // Redirect with a success message
+            return redirect('/')->with('message', 'Your job application has been submitted.');
+        } else {
+            // User is not signed in, show a message or redirect to the login page
+            return redirect('/login')->with('message', 'Please sign in to apply for this job.');
+        }
     }
 
 }

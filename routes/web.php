@@ -51,8 +51,8 @@ Route::get('/listings/applications', [ListingController::class, 'showApplication
 //single job listing
 Route::get('/listings/{listing}', [ListingController::class, 'showSingleListing']);
 
-// //add job experience for job seeker
-// Route::post('/add-job-experience', [JobSeekerController::class, 'addJobExperience']);
+//retrieve single job listing
+Route::get('/get-listing/{id}', [ListingController::class, 'retrieveSingleListingData']);
 
 //delete job experience for job seeker
 Route::delete('/delete-job-experience/{experienceId}', [JobseekerController::class, 'deleteJobExperience']);
@@ -78,6 +78,8 @@ Route::get('/editProfile/{employerName}/Employer', [EmployerController::class, '
 //Submit job seeker edit profile
 Route::post('/editProfile/{employerName}/submitEmployerDetails', [EmployerController::class, 'updateProfile'])->middleware('auth');
 
+//Show employer list page
+Route::get('/employers', [EmployerController::class, 'retrieveEmployerList']);
 
 //Create new employer account
 Route::post('/createEmployerUser', [EmployerController::class, 'createNewUser']);

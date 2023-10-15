@@ -17,6 +17,13 @@ class EmployerController extends Controller
         return view('users.employer_register');
     }
 
+    //Retrieve employer list
+    public function retrieveEmployerList(){
+        return view('pages.employer_list', [
+            'employers' => Employer::latest()->get()
+        ]);
+    }
+
     //Create employer user
     public function createNewUser(Request $request){
         $formFields = $request->validate([

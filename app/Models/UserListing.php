@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Listings;
 
 class UserListing extends Model
 {
@@ -19,6 +20,6 @@ class UserListing extends Model
     
     public function listing()
     {
-        return $this->belongsTo(Listing::class);
+        return $this->belongsTo(Listing::class, 'listing_id');
     }
 }

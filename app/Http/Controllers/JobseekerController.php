@@ -27,6 +27,9 @@ class JobseekerController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
+        $firstTimeLogin = $request->input('firstTimeLogin', 'No'); // Default to 'No' if not present
+
+
         //Hash password
         $formFields['password'] = bcrypt($formFields['password']);
         $formFields['user_type'] = 'Job Seeker';
@@ -47,16 +50,16 @@ class JobseekerController extends Controller
         //Login
         auth()->login($user);
 
-        return redirect("/editProfile/{{$newUserName}}/JobSeeker")->with('message', 'User created and logged in');
+        return redirect("/editProfile/{{$newUserName}}/JobSeeker")->with('message', 'User created and logged in')->with('firstTimeLogin', $firstTimeLogin);
+        ;
     }
-
 
     //Show job seeker profile edit page
     public function editProfile()
     {
         $user = auth()->user(); // Get the currently authenticated user
         $jobSeeker = Jobseeker::where('user_id', $user->id)->first(); // Retrieve the associated JobSeeker record
-
+        
         // Retrieve the Address record associated with the same user_id
         $address = Address::where('user_id', $user->id)->first();
         $jobExperiences = JobseekerJobExperience::where('job_seeker_id', $jobSeeker->user_id)->get();
@@ -89,7 +92,7 @@ class JobseekerController extends Controller
         ];
 
 
-        return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions'));
+        return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions','jobExperiences'));
     }
     //update job seeker profile
     public function updateProfile(Request $request)

@@ -28,6 +28,8 @@
                 
                 <x-text-input name="password_confirmation" label="Confirm Password" :value="old('password_confirmation')" type="password" />
 
+                <input type="hidden" name="firstTimeLogin" value="Yes">
+
                 <div class="mb-6">
                     <button
                         type="submit"

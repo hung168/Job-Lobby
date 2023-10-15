@@ -1,9 +1,19 @@
 <nav style="padding: 5px 0; background-color: #2E94B9;">
     <div class="mx-auto max-w-7xl ">
         <div class="relative flex h-16 items-center justify-between">
-            <a href="/"
-                ><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo"
-            /></a>
+            <ul class="flex items-center justify-center">
+                <a href="/"
+                    ><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo"
+                /></a>
+                <li>
+                    <a href="/" class="text-white rounded-lg py-1 font-semibold text-xl pl-10">Jobs 
+                    </a>
+                </li>
+                <li>
+                    <a href="/employers" class="text-white rounded-lg py-1 font-semibold text-xl pl-10">Employers 
+                    </a>
+                </li>
+            </ul>
             <ul class="flex space-x-6 mr-6 text-lg">
                 @if (session('firstTimeLogin') === 'Yes')
                 <!-- Show content specific to first-time login -->
