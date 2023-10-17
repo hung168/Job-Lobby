@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Schema::defaultStringLength(191);
         Validator::extend('malaysia_phone', function ($attribute, $value, $parameters, $validator) {
             // Use regular expression to validate the phone number format
             return preg_match('/^(\+?6?01)[0-9]{7,9}$/', $value);
