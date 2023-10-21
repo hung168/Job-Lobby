@@ -8,6 +8,9 @@ use App\Models\Listing;
 use App\Models\Jobseeker;
 use App\Models\Employer;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -33,6 +36,15 @@ class DatabaseSeeder extends Seeder
             $jobseeker = Jobseeker::factory()->create(['user_id' => $user->id]);
         });
         
+        // Create an admin user
+        DB::table('users')->insert([
+            'name' => 'Admin',
+            'user_type' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin'),
+            'remember_token' => Str::random(10),
+            'email_verified_at' => now()
+        ]);
 
     }
 }
