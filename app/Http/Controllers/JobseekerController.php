@@ -100,6 +100,12 @@ class JobseekerController extends Controller
         $user = auth()->user(); // Get the authenticated user
         $jobSeeker = Jobseeker::where('user_id', $user->id)->first(); // Find the job seeker record associated with the user
 
+        // Update the profile picture if a new one is provided
+        if ($request->hasFile('jobseeker_profile_pic')) {
+            $profilePicPath = $request->file('jobseeker_profile_pic')->store('images', 'public');
+            $jobSeeker->update(['jobseeker_profile_pic' => $profilePicPath]);
+        }
+        
         // $request->validate([
         //     // 'name' => 'required|string|max:255',
         //     // 'email' => 'required|email|unique:users,email,' . $user->id,

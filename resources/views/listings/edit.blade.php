@@ -47,6 +47,29 @@
             </div>
 
             <div class="mb-6">
+                <label for="academic_field" class="inline-block text-lg mb-2">
+                    Academic Field
+                </label>
+                <select name="academic_field" class="border border-gray-200 rounded p-2 w-full">
+                    <option value="Business" @if(old('academic_field', $listing->academic_field) === 'Business') selected @endif>Business</option>
+                    <option value="Health" @if(old('academic_field', $listing->academic_field) === 'Health') selected @endif>Health</option>
+                    <option value="Engineering" @if(old('academic_field', $listing->academic_field) === 'Engineering') selected @endif>Engineering</option>
+                    <option value="History" @if(old('academic_field', $listing->academic_field) === 'History') selected @endif>History</option>
+                    <option value="Computer Science" @if(old('academic_field', $listing->academic_field) === 'Computer Science') selected @endif>Computer Science</option>
+                    <option value="Psychology" @if(old('academic_field', $listing->academic_field) === 'Psychology') selected @endif>Psychology</option>
+                    <option value="Mathematics" @if(old('academic_field', $listing->academic_field) === 'Mathematics') selected @endif>Mathematics</option>
+                    <option value="Biology" @if(old('academic_field', $listing->academic_field) === 'Biology') selected @endif>Biology</option>
+                    <option value="Physics" @if(old('academic_field', $listing->academic_field) === 'Physics') selected @endif>Physics</option>
+                    <option value="Chemistry" @if(old('academic_field', $listing->academic_field) === 'Chemistry') selected @endif>Chemistry</option>
+                    <option value="Art and Design" @if(old('academic_field', $listing->academic_field) === 'Art and Design') selected @endif>Art and Design</option>                
+                </select>
+                
+                @error('academic_field')
+                    <p class="text-red-500 text-xs mt-1">{{$message}}</p>
+                @enderror
+            </div>
+
+            <div class="mb-6">
                 <label
                     for="location"
                     class="inline-block text-lg mb-2"
@@ -127,11 +150,7 @@
                     name="logo"
                 />
 
-                <img
-                class="w-48 mr-6 mb-6"
-                src="{{$listing-> logo ? asset('storage/' .$listing->logo) : asset('images/empty listing.png')}}"
-                alt=""
-                />
+                <img src="{{ asset('storage/' . $listing->logo) }}" alt="Profile Image"  class="object-cover w-40 h-40 rounded-full">
 
                 @error('logo')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>

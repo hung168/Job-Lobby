@@ -19,6 +19,13 @@
             >
                 Search
             </button>
+            <button
+                type="button"
+                class="h-10 w-20 text-white rounded-lg bg-laravel"
+            >
+                Filter
+            </button>
+
         </div>
     </div>
 </form>
