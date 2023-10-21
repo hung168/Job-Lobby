@@ -6,6 +6,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\AdminController;
 
 
 
@@ -93,6 +94,8 @@ Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 //Show login page
 Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
 
+//Admin module page
+Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->name('admin_module');
 
-
-
+//Admin delete post listing
+Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])->name('deleteListing');

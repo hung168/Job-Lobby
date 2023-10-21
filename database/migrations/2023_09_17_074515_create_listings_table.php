@@ -22,6 +22,8 @@ return new class extends Migration
             $table->String('email');
             $table->String('website');
             $table->longText('description');
+            $table->Boolean('reported');
+            $table->Boolean('verified');
             $table->timestamps();
         });
     }
