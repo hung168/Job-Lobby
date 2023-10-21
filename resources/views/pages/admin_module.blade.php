@@ -6,12 +6,6 @@
 <div class="admin_module">
     <h1 class="flex py-5 lg:px-20 md:px-10 px-5 lg:mx-40 md:mx-20 mx-5 font-bold text-4xl text-gray-800">Admin Module</h1>
 
-    @if(session('message'))
-    <div class="alert alert-success">
-        {{ session('message') }}
-    </div>
-    @endif
-
     @if ($reportedListings->isEmpty())
     <p>No reported listings found.</p>
     @else
@@ -49,7 +43,4 @@
         </tbody>
     </table>
     @endif
-
-
-
 </div>
