@@ -118,7 +118,7 @@ class JobseekerController extends Controller
             // 'SelectedGender' => $jobSeeker->gender,
             // 'SelectedEducationLevel' => $jobSeeker->education_level,
             // 'SelectedCompanyDressCode' => $jobSeeker->company_dress_code,
-        ]; 
+        ];
 
 
         return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions', 'jobExperiences'));
@@ -139,8 +139,8 @@ class JobseekerController extends Controller
             'nationality' => 'max:255',
             'postal_code' => 'regex:/^\d{5}$/',
             'telephone' => 'required|malaysia_phone',
-            'education_level'=> 'required',
-            'field_of_major'=> 'required',
+            'education_level' => 'required',
+            'field_of_major' => 'required',
         ]);
         // Find the job seeker record associated with the user
         $jobSeeker = Jobseeker::where('user_id', $user->id)->first();
@@ -258,13 +258,9 @@ class JobseekerController extends Controller
         return redirect('/')->with('success', 'Profile updated successfully');
     }
 
-
     public function deleteJobExperience($experienceId)
     {
-
         try {
-
-
             // Find the job experience record by its ID
             $jobExperience = JobseekerJobExperience::findOrFail($experienceId);
 
@@ -282,5 +278,17 @@ class JobseekerController extends Controller
         }
     }
 
+    protected function uploadResume(Request $request, User $user)
+    {
+        if ($request->hasFile('profile_document')) {
+            // Delete the existing profile document if it exists
+            if ($user->profile_document) {
+                Storage::delete('path/to/profile-documents/' . $user->profile_document);
+            }
 
+            // Store the new profile document
+            $profileDocument = $request->file('profile_document')->store('path/to/profile-documents', 'public');
+            $user->profile_document = $profileDocument;
+        }
+    }
 }
