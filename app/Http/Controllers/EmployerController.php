@@ -24,6 +24,11 @@ class EmployerController extends Controller
         ]);
     }
 
+    public function showEmployerDetails($id){
+        $employer = Employer::find($id);
+        return view('pages.employer_details', compact('employer'));
+    }
+
     //Create employer user
     public function createNewUser(Request $request){
         $formFields = $request->validate([
@@ -105,20 +110,49 @@ class EmployerController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = auth()->user(); // Get the authenticated user
-        $employer = Employer::where('user_id', $user->id)->first(); // Find the job seeker record associated with the user
-
-        $selectedBenefits = $request->input('employer_benefits', []);
-        $othersText = $request->input('employer_benefits_other');
-        
-        $selectedBenefits = array_diff($selectedBenefits, ['Others (Please specify)']);
-
+        // Get the authenticated user
+        $user = auth()->user();
     
-        if (in_array('Others (Please specify)', $selectedBenefits) && !empty($othersText)) {
-            $selectedBenefits[] = $othersText;
+        // Find the employer record associated with the user
+        $employer = Employer::where('user_id', $user->id)->first();
+    
+        // Update the profile picture if a new one is provided
+        if ($request->hasFile('employer_profile_pic')) {
+            $profilePicPath = $request->file('employer_profile_pic')->store('images', 'public');
+            $employer->update(['employer_profile_pic' => $profilePicPath]);
         }
-
-        // Update the employer's company address
+    
+        // Validation rules
+        $ProfileValidation = [
+            'name' => 'required|string',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore(auth()->user()->id),
+            ],
+            'department' => 'required|string',
+            'function_title' => 'required|string',
+            'company_name' => 'required|string',
+            'company_industry' => 'required|string',
+            'company_contact_number' => 'required|integer',
+            'company_overview' => 'required|string',
+            'company_registration_number' => 'required|integer',
+            'company_website' => 'nullable|url',
+            'street_address' => 'required|string',
+            'city' => 'required|string',
+            'state_province' => 'required',
+            'postal_code' => 'required|integer',
+        ];
+    
+        // Custom validation messages
+        $messages = [
+            'email.unique' => 'The email address has already been taken.',
+        ];
+    
+        // Validate the request data
+        $request->validate($ProfileValidation, $messages);
+        
+        // Update the employer's company address and other fields
         $employer->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -133,11 +167,23 @@ class EmployerController extends Controller
             'company_size' => $request->input('company_size'),
             'company_working_hour' => $request->input('company_working_hour'),
             'company_dress_code' => $request->input('company_dress_code'),
-            'company_benefits' => implode(', ', $selectedBenefits), // Serialize multiple selections
         ]);
-        
+    
+        // Update employer benefits
+        $selectedBenefits = $request->input('employer_benefits', []);
+        $othersText = $request->input('employer_benefits_other');
+    
+        $selectedBenefits = array_diff($selectedBenefits, ['Others (Please specify)']);
+    
+        if (in_array('Others (Please specify)', $selectedBenefits) && !empty($othersText)) {
+            $selectedBenefits[] = $othersText;
+        }
+    
+        $employer->update(['company_benefits' => implode(', ', $selectedBenefits)]);
+    
+        // Update the employer's address
         $existingAddress = Address::where('user_id', $user->id)->first();
-  
+    
         if ($existingAddress) {
             // Address record with the specified user_id exists; update it
             $existingAddress->update([
@@ -154,11 +200,9 @@ class EmployerController extends Controller
                     'Malaysia',
                 ]),
             ]);
-        
+    
             // Update the employer's address
-            $employer->update([
-                'address' => $existingAddress->address, // Update with existing address
-            ]);
+            $employer->update(['address' => $existingAddress->address]);
         } else {
             // Address record with the specified user_id does not exist; create a new one
             $address = Address::create([
@@ -176,23 +220,19 @@ class EmployerController extends Controller
                     'Malaysia',
                 ]),
             ]);
-        
+    
             // Update the employer's information with the new address
-            $employer->update([
-                'address' => $address->address, // Update with new address
-            ]);
+            $employer->update(['address' => $address->address]);
         }
-
+    
         // Update the user's information
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
         ]);
-
-
-
+    
         // Redirect back to the profile edit page with a success message
         return redirect('/')->with('success', 'Profile updated successfully');
     }
-
+    
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->String('logo')->nullable();
             $table->String('tags');
             $table->String('company');
+            $table->String('academic_field')->nullable();
             $table->String('location');
             $table->String('email');
             $table->String('website');

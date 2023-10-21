@@ -4,8 +4,8 @@
     <div class="w-full max-w-4xl py-8 flex flex-row items-center justify-center mb-8 bg-gray-50 rounded-lg shadow-md" onclick="window.location.href = '/listings/{{$application->id}}';" style="cursor: pointer;">
         <div class="flex flex-col md:flex-row w-11/12 space-x-10">
             <div class="w-full flex flex-col items-center justify-center">
-                <figure class="w-1/2 md:w-full overflow-hidden">
-                    <img src="https://images.pexels.com/photos/1820559/pexels-photo-1820559.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600" alt="woman wearing a headwrap and an Africa-shaped earring while smiling" figure="">
+                <figure class="w-full md:w-1/2 overflow-hidden">
+                    <img src="{{ asset('storage/' . $listing->logo) }}" alt="Profile Image"  class="object-cover w-40 h-40 rounded-full">
                 </figure>
             </div>
             <div class="w-full space-y-4 flex flex-col justify-center items-center">

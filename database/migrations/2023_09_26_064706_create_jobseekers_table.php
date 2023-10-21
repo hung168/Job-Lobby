@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('job_seekers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
+            $table->string('jobseeker_profile_pic')->nullable(); // profile picture
             $table->string('name'); // Name of the job seeker
             $table->string('address')->nullable(); // Address of the job seeker
             $table->date('date_of_birth')->nullable(); // Date of birth

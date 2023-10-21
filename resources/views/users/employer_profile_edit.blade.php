@@ -8,10 +8,26 @@
             <p class="mt-2 text-sm text-gray-600">Feel free to modify it to better suit your branding and messaging</p>
         </header>
 
-        <form method="POST" action="/editProfile/{{$employer->name}}/submitEmployerDetails" class="mt-6">
+        <form method="POST" action="/editProfile/{{$employer->name}}/submitEmployerDetails" class="mt-6" enctype="multipart/form-data">
             @csrf
             <div class="mx-auto max-w-2xl">
                 <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
+                    <div class="sm:col-span-6">
+                        <!-- Profile Picture -->
+                        <div class="mb-6">
+                            @if ($employer->employer_profile_pic)
+                                <div class="mt-2 text-center">
+                                    <img src="{{ asset('storage/' . $employer->employer_profile_pic) }}" class="w-40 h-40 rounded-full mx-auto" style="display: block;">
+                                </div>
+                            @endif
+                            <br><label for="employer_profile_pic" class="inline-block text-lg mb-2">Upload Profile Picture</label>
+                            <input type="file" name="employer_profile_pic" id="employer_profile_pic" class="border border-gray-200 rounded p-2 w-full">
+                            @error('employer_profile_pic')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    
                     <div class="sm:col-span-3">
                         <!-- Name -->
                         <x-text-input label="Name" name="name" type="text" :value="$employer->name" />
@@ -127,7 +143,7 @@
 
                     <div class="sm:col-span-full">
                         <div class="mt-6 flex items-center justify-end gap-x-6 mb-10">
-                            <a href="#" class="text-sm font-semibold text-gray-900">Cancel</a>
+                            <a href="/" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Cancel</a>
                             <button type="submit" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Save</button>
                         </div>
                     </div>

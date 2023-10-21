@@ -82,6 +82,9 @@ Route::post('/editProfile/{employerName}/submitEmployerDetails', [EmployerContro
 //Show employer list page
 Route::get('/employers', [EmployerController::class, 'retrieveEmployerList']);
 
+//View employer details page
+Route::get('/employers/details/{id}', [EmployerController::class, 'showEmployerDetails'])->name('employer_details');
+
 //Create new employer account
 Route::post('/createEmployerUser', [EmployerController::class, 'createNewUser']);
 

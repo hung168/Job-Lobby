@@ -46,6 +46,29 @@
             </div>
 
             <div class="mb-6">
+                <label for="academic_field" class="inline-block text-lg mb-2">
+                    Academic Field
+                </label>
+                <select name="academic_field" class="border border-gray-200 rounded p-2 w-full">
+                    <option value="Business">Business</option>
+                    <option value="Health">Health</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="History">History</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Art and Design">Art and Design</option>                
+                </select>
+
+                @error('academic_field')
+                    <p class="text-red-500 text-xs mt-1">{{$message}}</p>
+                @enderror
+            </div>
+
+            <div class="mb-6">
                 <label
                     for="location"
                     class="inline-block text-lg mb-2"

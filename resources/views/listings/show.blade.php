@@ -1,9 +1,12 @@
 <x-basic-layout>
     @auth
-    @include('partials._employernavbar')
+        @if (auth()->user()->user_type == 'Employer')
+            @include('partials._employernavbar')
+        @else
+            @include('partials._jobseekernavbar')
+        @endif
     @else
-    @include('partials._whitenavbar')
-
+        @include('partials._whitenavbar')
     @endauth
 
     <div class="mx-80 mt-20">
@@ -12,7 +15,7 @@
                 <div class="px-4 sm:px-0 flex items-center justify-center flex-col">
                   <h3 class="text-base font-semibold leading-7 text-gray-900">{{$listing->title}}</h3>
                   <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">{{$listing->company}}</p>
-                  <img class="w-48 mr-6 mb-6" src="{{$listing->logo ? asset('storage/' .$listing->logo) : asset('images/empty listing.png')}}" alt="Company Logo"/>
+                  <img src="{{ asset('storage/' . $listing->logo) }}" alt="Profile Image"  class="object-cover w-40 h-40 rounded-full">
                 </div>
         
                 <div class="mt-6 border-t border-gray-300">
@@ -26,6 +29,10 @@
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$listing->company}}</dd>
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Academic Field</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$listing->academic_field}}</dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">Categories</dt>
                             <x-listing-categories :tagsCsv="$listing->tags"/>
                         </div>
@@ -35,7 +42,7 @@
                         </div>
                         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt class="text-sm font-medium leading-6 text-gray-900">About</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.</dd>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$listing->description}}</dd>
                         </div>
                         @auth
                             @if(($listing->employer_user_id == auth()->user()->id) && (auth()->user()->user_type == 'Employer'))
@@ -72,10 +79,10 @@
                             <div class="p-10 flex items-center justify-center space-x-10">
                                 <form method="POST" action="{{ url('/' . $listing->id . '/apply') }}">
                                     @csrf
-                                    <div class="mb-6">
-                                        <button class="bg-laravel text-white rounded py-2 px-4 hover:bg-black" type="submit">
-                                            Apply
-                                        </button>
+                                    <div class="sm:col-span-full">
+                                        <div class="mt-6 flex items-center justify-end gap-x-6 mb-10">
+                                            <button type="submit" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Apply</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -85,9 +92,5 @@
                 </div>
             </div>
         </x-card>
-
-        <a href="javascript:history.back()" class="flex items-center justify-center inline-block text-black mt-20">
-            <i class="fa-solid fa-arrow-left"></i> Back
-        </a>
     </div>
 </x-basic-layout>

@@ -7,10 +7,27 @@
             <p class="mt-2 text-sm text-gray-600">Fill in your details</p>
         </header>
 
-        <form method="POST" action="/editProfile/{{$jobSeeker->name}}/submit">
+        <form method="POST" action="/editProfile/{{$jobSeeker->name}}/submit" enctype="multipart/form-data">
             @csrf
             <div class="mx-auto max-w-2xl">
                 <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
+
+                    <div class="sm:col-span-6">
+                        <!-- Profile Picture -->
+                        <div class="mb-6">
+                            @if ($jobSeeker->jobseeker_profile_pic)
+                                <div class="mt-2 text-center">
+                                    <img src="{{ asset('storage/' . $jobSeeker->jobseeker_profile_pic) }}" class="w-40 h-40 rounded-full mx-auto" style="display: block;">
+                                </div>
+                            @endif
+                            <br><label for="jobseeker_profile_pic" class="inline-block text-lg mb-2">Upload Profile Picture</label>
+                            <input type="file" name="jobseeker_profile_pic" id="jobseeker_profile_pic" class="border border-gray-200 rounded p-2 w-full">
+                            @error('jobseeker_profile_pic')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    
                     <!-- Name -->
                     <div class="sm:col-span-3">
                         <x-text-input label="Name" name="name" type="text" :value="$jobSeeker->name" />
@@ -109,6 +126,7 @@
 
                     <!-- Save Button -->
                     <div class="sm:col-span-6 text-center">
+                        <a href="/" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Cancel</a>
                         <button type="submit" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Save</button>
                     </div>
                 </div>

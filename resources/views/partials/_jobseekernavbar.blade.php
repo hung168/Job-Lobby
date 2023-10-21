@@ -17,16 +17,21 @@
             <ul class="flex space-x-6 mr-6 text-lg">
                 @if (session('firstTimeLogin') === 'Yes')
                 <!-- Show content specific to first-time login -->
-                    <span class="font-bold text-white uppercase">
-                        Welcome {{ auth()->user()->name }}
+                    <span class="font-bold text-white ">
+                        Welcome, {{ auth()->user()->name }}
                     </span>
                 @else
                     <!-- Show content for regular login -->   
                     <div class="dropdown">
                         <button class="text-white rounded-lg py-1 px-2 font-semibold" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center;">
-                            <span class="mr-1">
+                        <span class="mr-1">
+                            @if (!empty(auth()->user()->jobSeeker->jobseeker_profile_pic))
+                            <!-- Check if a profile picture exists -->
+                                <img src="{{ asset('storage/' . auth()->user()->jobSeeker->jobseeker_profile_pic) }}" style="width: 48px; height: 48px; border-radius: 50%;">
+                            @else
                                 <i class="fa-solid fa-circle" style="font-size: 48px;"></i>
-                            </span>
+                            @endif
+                        </span>
                             {{ auth()->user()->name }}
                         </button>
                         <ul class="dropdown-menu">
