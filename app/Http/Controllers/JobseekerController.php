@@ -278,17 +278,21 @@ class JobseekerController extends Controller
         }
     }
 
-    protected function uploadResume(Request $request, User $user)
+    protected function fileUpload(Request $request, User $user)
     {
-        if ($request->hasFile('profile_document')) {
-            // Delete the existing profile document if it exists
-            if ($user->profile_document) {
-                Storage::delete('path/to/profile-documents/' . $user->profile_document);
-            }
-
-            // Store the new profile document
-            $profileDocument = $request->file('profile_document')->store('path/to/profile-documents', 'public');
-            $user->profile_document = $profileDocument;
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
+        ]);
+        $fileModel = new File;
+        if ($request->file()) {
+            $fileName = time() . '_' . $user->name.'_Resume';
+            $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
+            $fileModel->name = time() . '_' . $request->file->getClientOriginalName();
+            $fileModel->file_path = '/storage/' . $filePath;
+            $fileModel->save();
+            return back()
+                ->with('success', 'File has been uploaded.')
+                ->with('file', $fileName);
         }
     }
 }

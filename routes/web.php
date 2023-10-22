@@ -93,6 +93,9 @@ Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 //Show login page
 Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
 
+//upload resume
+Route::get('/upload-file', [JobseekerController::class, 'createForm']);
+Route::post('/upload-file', [JobseekerController::class, 'fileUpload'])->name('fileUpload');
 
 
 
