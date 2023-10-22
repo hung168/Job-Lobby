@@ -102,3 +102,6 @@ Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->nam
 
 //Admin delete post listing
 Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])->name('deleteListing');
+
+//Admin verify post listing
+Route::patch('/verifyListing/{id}', [AdminController::class, 'verifyListing'])->name('verifyListing');

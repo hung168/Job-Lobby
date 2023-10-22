@@ -11,7 +11,6 @@ class AdminController extends Controller
     //admin module
     public function admin_module(Request $request)
     {
-
         // retrieve all reported listings
         $reportedListings = Listing::where('reported', 1)->get();
 
@@ -25,10 +24,10 @@ class AdminController extends Controller
             // Find the listing by its ID
             $listing = Listing::findOrFail($Id);
 
-            // Delete the job experience
+            // Delete listing
             $listing->delete();
 
-            return redirect('/pages/admin_module')->with(['message' => 'Listing deleted']);
+            return redirect()->route('admin_module')->with(['message' => 'Listing deleted']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => 'Listing not found!']);
         }
@@ -41,10 +40,12 @@ class AdminController extends Controller
             // Find the listing by its ID
             $listing = Listing::findOrFail($Id);
 
-            // Delete the job experience
-            $listing->delete();
+            // Verify listing
+            $listing->reported = 0;
+            $listing->verified = 1;
+            $listing->update();
 
-            return redirect('/pages/admin_module')->with(['message' => 'Listing deleted']);
+            return redirect()->route('admin_module')->with(['message' => 'Listing verified']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => 'Listing not found!']);
         }
