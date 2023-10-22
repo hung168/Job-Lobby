@@ -27,7 +27,7 @@ class EmployerFactory extends Factory
             'department' => fake()->randomElement(['Sales', 'Marketing', 'Finance', 'IT', 'HR']),
             'company_name' => fake()->company,
             'company_industry' => fake()->word,
-            'company_overview' => fake()->text,
+            'company_overview' => fake()->sentence,
             'company_registration_number' => fake()->numerify('##########'),
             'address' => fake()->address,
             'company_contact_number' => fake()->phoneNumber,
@@ -35,7 +35,7 @@ class EmployerFactory extends Factory
             'company_size' => fake()->randomElement(['Small', 'Medium', 'Large']),
             'company_working_hour' => fake()->randomElement(['Full-time', 'Part-time']),
             'company_dress_code' => fake()->sentence,
-            'company_benefits' => fake()->paragraph,
+            'company_benefits' => fake()->sentence,
             
         ];
     }

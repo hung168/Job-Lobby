@@ -144,6 +144,27 @@ class JobseekerController extends Controller
         ]);
         // Find the job seeker record associated with the user
         $jobSeeker = Jobseeker::where('user_id', $user->id)->first();
+        $jobSeeker = Jobseeker::where('user_id', $user->id)->first(); // Find the job seeker record associated with the user
+
+        // Update the profile picture if a new one is provided
+        if ($request->hasFile('jobseeker_profile_pic')) {
+            $profilePicPath = $request->file('jobseeker_profile_pic')->store('images', 'public');
+            $jobSeeker->update(['jobseeker_profile_pic' => $profilePicPath]);
+        }
+        
+        // $request->validate([
+        //     // 'name' => 'required|string|max:255',
+        //     // 'email' => 'required|email|unique:users,email,' . $user->id,
+        //     // 'date_of_birth' => 'required|date',
+        //     // 'user_type' => 'required|in:Job Seeker,male', // Adjust as needed
+        //     'street_address' => 'max:255',
+        //     'city' => 'max:255',
+        //     'state_province' => 'required',
+        //     'nationality' => 'max:255',
+        //     'postal_code' => 'regex:/^\d{5}$/',
+        //     'telephone' => 'required|malaysia_phone',
+        // ]);
+
         // Update the JobSeeker's address
         $jobSeeker->update([
             'name' => $request->input('name'),

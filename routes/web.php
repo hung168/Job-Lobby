@@ -6,6 +6,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\AdminController;
 
 
 
@@ -81,6 +82,9 @@ Route::post('/editProfile/{employerName}/submitEmployerDetails', [EmployerContro
 //Show employer list page
 Route::get('/employers', [EmployerController::class, 'retrieveEmployerList']);
 
+//View employer details page
+Route::get('/employers/details/{id}', [EmployerController::class, 'showEmployerDetails'])->name('employer_details');
+
 //Create new employer account
 Route::post('/createEmployerUser', [EmployerController::class, 'createNewUser']);
 
@@ -97,5 +101,11 @@ Route::get('/login', [UserController::class, 'login'])->name('login')->middlewar
 Route::get('/upload-file', [JobseekerController::class, 'createForm']);
 Route::post('/upload-file', [JobseekerController::class, 'fileUpload'])->name('fileUpload');
 
+//Admin module page
+Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->name('admin_module');
 
+//Admin delete post listing
+Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])->name('deleteListing');
 
+//Admin verify post listing
+Route::patch('/verifyListing/{id}', [AdminController::class, 'verifyListing'])->name('verifyListing');

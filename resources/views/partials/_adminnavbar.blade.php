@@ -22,18 +22,12 @@
                     <div class="dropdown">
                         <button class="text-white rounded-lg py-1 px-2 font-semibold" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center;">
                             <span class="mr-1">
-                                @if (!empty(auth()->user()->employer->employer_profile_pic))
-                                <!-- Check if a profile picture exists -->
-                                    <img src="{{ asset('storage/' . auth()->user()->employer->employer_profile_pic) }}" style="width: 48px; height: 48px; border-radius: 50%;">
-                                @else
-                                    <i class="fa-solid fa-circle" style="font-size: 48px;"></i>
-                                @endif
+                                <i class="fa-solid fa-circle" style="font-size: 48px;"></i>
                             </span>
                             {{ auth()->user()->name }}
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class= "dropdown-item" href="/editProfile/{{ auth()->user()->name }}/Employer">Edit Profile</a></li>
-                            <li><a class="dropdown-item" href="/listings/manage">Manage Listings</a></li>
+                            <li><a class= "dropdown-item" href="/pages/admin_module">Reported Listings</a></li>
                             <li>
                                 <form class="dropdown-item" method="POST" action="/logout">
                                     @csrf

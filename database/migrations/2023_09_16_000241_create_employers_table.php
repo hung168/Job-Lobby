@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
+            $table->string('employer_profile_pic')->nullable(); // profile picture
             $table->string('name');
             $table->string('email')->unique()->nullable(); // Email address (unique)
             $table->string('function_title')->nullable(); // Function title
@@ -21,7 +22,7 @@ return new class extends Migration
 
             $table->string('company_name')->default('Default Company Name');
             $table->string('company_industry')->nullable();
-            $table->string('company_overview')->nullable();
+            $table->string('company_overview', 500)->nullable();
             $table->string('company_registration_number')->nullable();
             $table->string('address')->nullable();
             $table->string('company_contact_number')->nullable(); 
@@ -29,7 +30,7 @@ return new class extends Migration
             $table->string('company_size')->nullable(); 
             $table->string('company_working_hour')->nullable();
             $table->string('company_dress_code')->nullable();
-            $table->string('company_benefits')->nullable(); 
+            $table->string('company_benefits', 500)->nullable(); 
             $table->timestamps();
 
 
@@ -42,7 +43,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employer');
+        Schema::dropIfExists('employers');
     }
 
     public function before()

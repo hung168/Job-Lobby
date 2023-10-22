@@ -24,7 +24,14 @@ class ListingFactory extends Factory
             'website' => $this->faker->url(),
             'location' => $this->faker->city(),
             'description' => $this->faker->paragraph(5),
+            'reported' => rand(0, 1),
+            'verified' => function () {
+                // Generate a random value between 0 and 1
+                $verified = rand(0, 1);
 
+                // If 'reported' is 1, set 'verified' to 0; otherwise, keep the random value
+                return $verified && rand(0, 1) === 1 ? 0 : $verified;
+            },
         ];
     }
 }

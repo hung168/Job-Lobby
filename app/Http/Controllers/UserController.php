@@ -21,7 +21,7 @@ class UserController extends Controller
 
     }
 
-    //Logout user
+    //Login user
     public function login(Request $request){
         $message = session('message');
 
