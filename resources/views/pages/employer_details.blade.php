@@ -44,10 +44,11 @@
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$employer->company_registration_number}}</dd>
                             <dt class="text-sm font-medium leading-6 text-gray-900">Company Website</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$employer->company_website}}</dd>
-                        </div>
-                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt class="text-sm font-medium leading-6 text-gray-900">Location</dt>
-                        </div>
+                        </div>                        
+                            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt class="text-sm font-medium leading-6 text-gray-900">Address</dt>
+                                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$employer->address}}</dd>
+                            </div>
                     </dl>
                 </div><br>
                 <div class="sm:col-span-6 text-center">
