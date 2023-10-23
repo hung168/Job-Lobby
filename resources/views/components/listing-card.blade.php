@@ -22,17 +22,25 @@
                     <x-listing-categories :tagsCsv="$listing->tags"/>
                 </ul>
                 <ul class="w-full ">
-                <form method="POST" action="{{ route('report-listing', ['id' => $listing->id]) }}">
+                <form method="POST" action="{{ url('/' . $listing->id . '/apply') }}">
                     @csrf
                     <div class="flex justify-between">
-                        <button class="transition-colors bg-theme-color hover:bg-theme-color p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
-                            Apply
-                        </button>
-                        <button class="transition-colors bg-red-500 hover:bg-red-600 p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
-                            Report
-                        </button>
+                        @if (auth()->check() && auth()->user()->user_type == "Employer")
+                            <button href="/listings/{{$listing->id}}/report" class="transition-colors bg-red-500 hover-bg-red-600 p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
+                                Report
+                            </button>
+                        @else
+                            <button class="transition-colors bg-theme-color hover-bg-theme-color p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow mr-10">
+                                Apply
+                            </button>
+                            <button href="/listings/{{$listing->id}}/report" class="transition-colors bg-red-500 hover-bg-red-600 p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
+                                Report
+                            </button>
+                        @endif                    
                     </div>
                 </form>
+
+
                 </ul>
             </div>
         </div>
