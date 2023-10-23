@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\UserListing;
 use App\Models\Employer;
+use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -16,18 +17,45 @@ class ListingController extends Controller
     //show all listings
 
     public function index() {
+        $excludeUserListings = UserListing::where('user_id', auth()->id())->pluck('listing_id');
+    
         return view('listings.index', [
-            'listings' => Listing::latest()->filter(request(['tag', 'search']))->paginate(8)
+            'listings' => Listing::latest()
+                ->filter(request(['tag', 'search']))
+                ->whereNotIn('id', $excludeUserListings)
+                ->paginate(8)
         ]);
-        
     }
+    
 
     //Show single listing
     public function showSingleListing(Listing $listing) {
+        $user = auth()->user();
+    
+        if ($user->user_type === 'Employer') {
+    
+            // Get the list of user_id values where listing_id matches the current listing's ID
+            $userIds = UserListing::where('listing_id', $listing->id)
+            ->where('status', 'Job Application In Review')
+            ->pluck('user_id')
+            ->toArray();
+    
+            $jobseekerDetails = Jobseeker::whereIn('user_id', $userIds)->get();
+
+            return view('listings.show', [
+                'listing' => $listing,
+                'jobseekerDetails' => $jobseekerDetails,
+            ]);
+
+        }
+
+        
+    
         return view('listings.show', [
-            'listing' => $listing
+            'listing' => $listing,
         ]);
     }
+    
 
     //Show single listing
     public function retrieveSingleListingData($id) {
@@ -173,4 +201,44 @@ class ListingController extends Controller
             return redirect()->back()->with('success', 'Listing reported successfully');
         }
     }
+
+    public function boostListing(Listing $listing)
+    {
+        // Check if the user is authorized to boost the listing (you can add your authorization logic here)
+        if (auth()->id() === $listing->employer_user_id) {
+            // Update the 'boosted' field to 1
+            $listing->update(['boosted' => 1]);
+
+            return redirect()->back()->with('success', 'Listing has been boosted.');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to boost this listing.');
+        }
+    }
+
+    public function acceptJobApplication(UserListing $userListing)
+    {
+        // Check if the currently authenticated user is authorized to accept the job application
+        if (auth()->user()->user_type === 'Employer') {
+            // Update the status of the job application to "Accepted" (You can customize this status as needed)
+            $userListing->update(['status' => 'Accepted']);
+
+            return redirect()->back()->with('success', 'Job application has been accepted.');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to accept this job application.');
+        }
+    }
+
+    public function rejectJobApplication(UserListing $userListing)
+    {
+        // Check if the currently authenticated user is authorized to reject the job application
+        if (auth()->user()->user_type === 'Employer') {
+            // Update the status of the job application to "Rejected" (You can customize this status as needed)
+            $userListing->update(['status' => 'Rejected']);
+
+            return redirect()->back()->with('success', 'Job application has been rejected.');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to reject this job application.');
+        }
+    }
+
 }

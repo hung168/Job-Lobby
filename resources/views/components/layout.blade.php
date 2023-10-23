@@ -34,7 +34,7 @@
                 },
             };
         </script>
-        <title>LaraGigs | Find Laravel Jobs & Projects</title>
+        <title>Job Lobby | Find  & Apply Jobs</title>
     </head>
     <body class="mb-48" style="background-color: #fafafa;">
         @include('partials._whitenavbar')

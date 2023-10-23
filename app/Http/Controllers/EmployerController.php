@@ -66,7 +66,7 @@ class EmployerController extends Controller
             ->with('firstTimeLogin', $firstTimeLogin);
         }
 
-    //Show job seeker profile edit page
+    //Show employer edit page
     public function editProfile()
     {
         $user = auth()->user(); // Get the currently authenticated user

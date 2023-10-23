@@ -1,7 +1,7 @@
 @props(['application'])
 
 <div class="flex items-center justify-center">
-    <div class="w-full max-w-4xl py-8 flex flex-row items-center justify-center mb-8 bg-gray-50 rounded-lg shadow-md" onclick="window.location.href = '/listings/{{$application->id}}';" style="cursor: pointer;">
+    <div class="w-full max-w-4xl py-8 flex flex-row items-center justify-center mb-8 bg-gray-50 rounded-lg shadow-md" onclick="window.location.href = '/listings/{{$application->listing->id}}';" style="cursor: pointer;">
         <div class="flex flex-col md:flex-row w-11/12 space-x-10">
             <div class="w-full flex flex-col items-center justify-center">
                 <figure class="w-full md:w-1/2 overflow-hidden">

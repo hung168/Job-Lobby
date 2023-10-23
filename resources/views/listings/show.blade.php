@@ -93,4 +93,54 @@
             </div>
         </x-card>
     </div>
+
+    @auth
+    @if (auth()->user()->user_type == 'Employer')
+        <div class="flex flex-wrap justify-center mx-auto px-4 sm:px-8 md:px-12 lg:px-16 mt-10 mb-10">
+            @unless (count($jobseekerDetails) == 0)
+
+                @foreach($jobseekerDetails as $job_seeker)
+                <div class="w-1/3 p-4">
+                    <div class="container max-w-xl items-center justify-center overflow-hidden rounded-2xl bg-slate-200 shadow-xl">
+                        <div class="h-10"></div>
+                        <div class="flex justify-center">
+                            <a href="">
+                                <img src="{{ asset('storage/' . $job_seeker->jobseeker_profile_pic) }}" alt="Profile Image"  class="object-cover w-40 h-40 rounded-full">
+                            </a>
+                        </div>
+                        <div class="mt-2 mb-1 px-3 text-center font-bold text-xl">
+                            <a>{{ $job_seeker->name }}</a>
+                        </div>
+                        <div class="mb-2 px-3 text-center text-xl text-sky-500">{{ $job_seeker->field_of_major }}</div>
+                        <div class="mx-2 mb-7 text-center text-base">{{ $job_seeker->education_level }}</div>
+
+                        <div class="flex justify-center space-x-4 mb-4">
+                            <form action="/{{$job_seeker->id}}/accept" method="POST">
+                                @csrf
+                                @method('POST')
+                                <button type="submit" class="bg-green-500 text-white rounded py-2 px-4 hover:bg-green-700">
+                                    Accept
+                                </button>
+                            </form>
+                        
+                            <form action="/{{$job_seeker->id}}/reject" method="POST">
+                                @csrf
+                                @method('POST')
+                                <button type="submit" class="bg-red-500 text-white rounded py-2 px-4 hover:bg-red-700">
+                                    Reject
+                                </button>
+                            </form>
+                        </div>                        
+                        
+                    </div>
+                </div>
+                @endforeach
+            @else
+                <p class="p-10 flex items-center justify-center space-x-10 bg-laravel text-white rounded py-2 px-4">No applications yet</p>
+            @endunless
+        </div>
+    @endif
+    @endauth
+
+
 </x-basic-layout>
