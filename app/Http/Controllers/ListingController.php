@@ -71,7 +71,7 @@ class ListingController extends Controller
     public function store(Request $request) {
         $formFields = $request->validate([
             'title'=> 'required',
-            'company'=> ['required', Rule::unique('listings','company')],
+            'company'=> ['required'],
             'academic_field'=> 'required',
             'location'=> 'required',
             'website'=> 'required',
@@ -203,6 +203,19 @@ class ListingController extends Controller
             return redirect()->back()->with('success', 'Listing reported successfully');
         }
     }
+
+    public function filterListings(Request $request)
+    {
+        // Retrieve the selected academic field from the request
+        $academicField = $request->input('academic_field');
+
+        // Apply your filter logic to the data query
+        $filteredListings = Listing::where('academic_field', $academicField)->paginate(8);
+
+        // Return the filtered data to the view
+        return view('listings.index', ['listings' => $filteredListings]);
+    }
+
 
     public function boostListing(Listing $listing)
     {
