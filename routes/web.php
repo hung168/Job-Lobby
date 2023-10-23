@@ -97,6 +97,8 @@ Route::get('/employers', [EmployerController::class, 'retrieveEmployerList']);
 //View employer details page
 Route::get('/employers/details/{id}', [EmployerController::class, 'showEmployerDetails'])->name('employer_details');
 
+Route::get('/jobseeker/details/{id}', [JobseekerController::class, 'showJobSeekerDetails'])->name('job_applications_');
+
 //Create new employer account
 Route::post('/createEmployerUser', [EmployerController::class, 'createNewUser']);
 

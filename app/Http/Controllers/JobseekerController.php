@@ -315,4 +315,12 @@ class JobseekerController extends Controller
 
         }
     }
+
+    public function showJobSeekerDetails($id){
+        $jobSeeker = Jobseeker::find($id);
+        $resume = Resume::find($id);
+        $jobExperiences = JobseekerJobExperience::where('job_seeker_id', $jobSeeker->user_id)->get();
+        return view('pages.job_applications_', compact('jobSeeker', 'resume', 'jobExperiences'));
+    }
+
 }
