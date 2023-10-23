@@ -117,3 +117,6 @@ Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])-
 
 //Admin verify post listing
 Route::patch('/verifyListing/{id}', [AdminController::class, 'verifyListing'])->name('verifyListing');
+
+//Filter listing
+Route::post('/filter_listings', [ListingController::class, 'filterListings'])->name('filter_listings');

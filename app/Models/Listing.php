@@ -25,7 +25,6 @@ class Listing extends Model
     }
 
     //Link listing to employer user id
-
     public function employer(){
         return $this->belongsTo(Employer::class,'employer_user_id');
     }
