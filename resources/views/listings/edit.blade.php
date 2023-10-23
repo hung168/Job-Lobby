@@ -70,6 +70,20 @@
             </div>
 
             <div class="mb-6">
+                <label for="slots_available" class="inline-block text-lg mb-2">Number of Slots</label>
+                <input
+                    type="number"
+                    class="border border-gray-200 rounded p-2 w-full"
+                    name="slots_available"
+                    value="{{$listing->slots_available}}"
+                />
+                @error('slots_available')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+
+            <div class="mb-6">
                 <label
                     for="location"
                     class="inline-block text-lg mb-2"

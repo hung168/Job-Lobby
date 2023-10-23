@@ -8,6 +8,7 @@
                         <img src="{{ asset('storage/' . $listing->logo) }}" alt="Profile Image"  class="object-cover w-80 h-80 rounded-full">
                     </figure>
                 </div>
+
                 <div class="w-full space-y-4 flex flex-col justify-center items-center">
                     <div class="flex flex-col justify-center">  
                         <h1 class="text-center md:text-left text-2xl font-bold text-gray-900"><a>{{$listing->title}}</a></h1>
@@ -15,7 +16,7 @@
                     </div>
                     <ul class="space-y-4  md:space-y-0 space-x-0 md:space-x-4 flex flex-col md:flex-row text-left justify-center">
                         <li class="text-sm"><i class="fa-solid fa-location-dot"></i> {{$listing->location}}</li>
-                        <li class="text-sm"><i class="iconoir-calendar mr-2"></i>Member since 2019 </li>
+                        <li class="text-sm"><i class="fa-solid fa-user"></i> {{$listing->slots_available}}</li>
                     </ul>
 
                     <ul class="space-x-4 flex flex-row justify-center w-full mb-4">
@@ -26,6 +27,7 @@
                         <a href="/listings/{{ $listing['id'] }}/edit" class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">
                             Edit
                         </a> 
+
 
                         <a class="bg-laravel text-white rounded py-2 px-4 hover:bg-black boost-button" data-target="boostModal{{$listing->id}}">
                             Boost

@@ -15,7 +15,7 @@
                 </div>
                 <ul class="space-y-4  md:space-y-0 space-x-0 md:space-x-4 flex flex-col md:flex-row text-left justify-center">
                     <li class="text-sm"><i class="fa-solid fa-location-dot"></i> {{$application->listing->location}}</li>
-                    <li class="text-sm"><i class="iconoir-calendar mr-2"></i>Member since 2019 </li>
+                    <li class="text-sm"><i class="fa-solid fa-user"></i> {{$application->listing->slots_available}}</li>
                 </ul>
 
                 <ul class="space-x-4 flex flex-row justify-center w-full mb-4">
