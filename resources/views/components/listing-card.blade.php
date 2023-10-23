@@ -22,14 +22,17 @@
                     <x-listing-categories :tagsCsv="$listing->tags"/>
                 </ul>
                 <ul class="w-full ">
-                    <form method="POST" action="{{ url('/' . $listing->id . '/apply') }}" >
-                        @csrf
-                        <div>
-                            <button class="transition-colors bg-theme-color hover:bg-theme-color p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
-                                Apply
-                            </button>
-                        </div>
-                    </form>                
+                <form method="POST" action="{{ route('report-listing', ['id' => $listing->id]) }}">
+                    @csrf
+                    <div class="flex justify-between">
+                        <button class="transition-colors bg-theme-color hover:bg-theme-color p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
+                            Apply
+                        </button>
+                        <button class="transition-colors bg-red-500 hover:bg-red-600 p-2 rounded-lg w-full text-white text-hover shadow-md custom shadow">
+                            Report
+                        </button>
+                    </div>
+                </form>
                 </ul>
             </div>
         </div>
