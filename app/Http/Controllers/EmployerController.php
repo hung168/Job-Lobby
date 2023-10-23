@@ -2,38 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\DatabaseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Employer;
 use App\Models\Address;
+use App\Models\EmpRating;
 
 
 class EmployerController extends Controller
 {
     //Show employer registration page
-    public function register(){
+    public function register()
+    {
         return view('users.employer_register');
     }
 
     //Retrieve employer list
-    public function retrieveEmployerList(){
+    public function retrieveEmployerList()
+    {
         return view('pages.employer_list', [
             'employers' => Employer::latest()->get()
         ]);
     }
 
-    public function showEmployerDetails($id){
+    public function showEmployerDetails($id)
+    {
         $employer = Employer::find($id);
-        return view('pages.employer_details', compact('employer'));
+        $empRating = EmpRating::where('user_id', $id)
+            ->join('users', 'users.id', '=', 'review_and_rating.rateable_id')
+            ->select('review_and_rating.*', 'users.name as user_name')
+            ->get();
+        return view('pages.employer_details', compact('employer', 'empRating'));
     }
 
     //Create employer user
-    public function createNewUser(Request $request){
+    public function createNewUser(Request $request)
+    {
         $formFields = $request->validate([
             'name' => ['required', 'min:3'],
-            'email' => ['required', 'email', Rule::unique('users','email')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => 'required|confirmed|min:6',
         ]);
 
@@ -53,10 +63,10 @@ class EmployerController extends Controller
 
         Employer::create([
             'user_id' => $newUserId,
-            'name' => $newUserName, 
+            'name' => $newUserName,
             'email' => $newEmail,
         ]);
-        
+
         //Login
         auth()->login($user);
 
@@ -64,7 +74,7 @@ class EmployerController extends Controller
         return redirect("/editProfile/{$newUserName}/Employer")
             ->with('message', 'User created and logged in')
             ->with('firstTimeLogin', $firstTimeLogin);
-        }
+    }
 
     //Show employer edit page
     public function editProfile()
@@ -73,29 +83,63 @@ class EmployerController extends Controller
         $employer = Employer::where('user_id', $user->id)->first(); // Retrieve the associated Employer record
 
         // Retrieve the Address record associated with the same user_id
-         $address = Address::where('user_id', $user->id)->first();
+        $address = Address::where('user_id', $user->id)->first();
 
-         $options = [
+        $options = [
             'StateProvince' => [
-                'Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka', 'Negeri Sembilan',
-                'Pahang', 'Penang', 'Perak', 'Perlis', 'Putrajaya', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu'
+                'Johor',
+                'Kedah',
+                'Kelantan',
+                'Kuala Lumpur',
+                'Labuan',
+                'Melaka',
+                'Negeri Sembilan',
+                'Pahang',
+                'Penang',
+                'Perak',
+                'Perlis',
+                'Putrajaya',
+                'Sabah',
+                'Sarawak',
+                'Selangor',
+                'Terengganu'
             ],
             'CompanySize' => [
-                'Not Specified', '1-50', '51-200', '201-500', '501-1000', '1001-2000', 'More than 2000'
+                'Not Specified',
+                '1-50',
+                '51-200',
+                '201-500',
+                '501-1000',
+                '1001-2000',
+                'More than 2000'
             ],
             'CompanyWorkingHours' => [
-                'Not Specified', 'Regular hours, Mondays-Fridays', 'Saturdays or Shift required', 'Long hours'
+                'Not Specified',
+                'Regular hours, Mondays-Fridays',
+                'Saturdays or Shift required',
+                'Long hours'
             ],
             'CompanyDressCode' => [
-                'Not Specified', 'Casual (e.g. T-shirts)', 'Business (e.g. Shirts)', 'Formal (e.g. Shirts + Ties)', 'Others (Please Specify)'
+                'Not Specified',
+                'Casual (e.g. T-shirts)',
+                'Business (e.g. Shirts)',
+                'Formal (e.g. Shirts + Ties)',
+                'Others (Please Specify)'
             ],
             'EmployerBenefits' => [
-                'Health Insurance', 'Dental Coverage', 'Retirement Plan', 'Paid Time Off', 'Parking',
-                'Vision', 'Education Support', 'Allowance', 'Others (Please specify)'
+                'Health Insurance',
+                'Dental Coverage',
+                'Retirement Plan',
+                'Paid Time Off',
+                'Parking',
+                'Vision',
+                'Education Support',
+                'Allowance',
+                'Others (Please specify)'
             ]
         ];
-        
-        
+
+
         $selectedOptions = [
             'SelectedBenefits' => explode(', ', $employer->company_benefits),
             'SelectedCompanySize' => $employer->company_size ?? '',
@@ -104,7 +148,7 @@ class EmployerController extends Controller
         ];
 
 
-        return view('users.employer_profile_edit', compact('employer','address','options','selectedOptions'));
+        return view('users.employer_profile_edit', compact('employer', 'address', 'options', 'selectedOptions'));
 
     }
 
@@ -112,16 +156,16 @@ class EmployerController extends Controller
     {
         // Get the authenticated user
         $user = auth()->user();
-    
+
         // Find the employer record associated with the user
         $employer = Employer::where('user_id', $user->id)->first();
-    
+
         // Update the profile picture if a new one is provided
         if ($request->hasFile('employer_profile_pic')) {
             $profilePicPath = $request->file('employer_profile_pic')->store('images', 'public');
             $employer->update(['employer_profile_pic' => $profilePicPath]);
         }
-    
+
         // Validation rules
         $ProfileValidation = [
             'name' => 'required|string',
@@ -143,15 +187,15 @@ class EmployerController extends Controller
             'state_province' => 'required',
             'postal_code' => 'required|integer',
         ];
-    
+
         // Custom validation messages
         $messages = [
             'email.unique' => 'The email address has already been taken.',
         ];
-    
+
         // Validate the request data
         $request->validate($ProfileValidation, $messages);
-        
+
         // Update the employer's company address and other fields
         $employer->update([
             'name' => $request->input('name'),
@@ -168,22 +212,22 @@ class EmployerController extends Controller
             'company_working_hour' => $request->input('company_working_hour'),
             'company_dress_code' => $request->input('company_dress_code'),
         ]);
-    
+
         // Update employer benefits
         $selectedBenefits = $request->input('employer_benefits', []);
         $othersText = $request->input('employer_benefits_other');
-    
+
         $selectedBenefits = array_diff($selectedBenefits, ['Others (Please specify)']);
-    
+
         if (in_array('Others (Please specify)', $selectedBenefits) && !empty($othersText)) {
             $selectedBenefits[] = $othersText;
         }
-    
+
         $employer->update(['company_benefits' => implode(', ', $selectedBenefits)]);
-    
+
         // Update the employer's address
         $existingAddress = Address::where('user_id', $user->id)->first();
-    
+
         if ($existingAddress) {
             // Address record with the specified user_id exists; update it
             $existingAddress->update([
@@ -200,7 +244,7 @@ class EmployerController extends Controller
                     'Malaysia',
                 ]),
             ]);
-    
+
             // Update the employer's address
             $employer->update(['address' => $existingAddress->address]);
         } else {
@@ -220,19 +264,52 @@ class EmployerController extends Controller
                     'Malaysia',
                 ]),
             ]);
-    
+
             // Update the employer's information with the new address
             $employer->update(['address' => $address->address]);
         }
-    
+
         // Update the user's information
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
         ]);
-    
+
         // Redirect back to the profile edit page with a success message
         return redirect('/')->with('success', 'Profile updated successfully');
     }
-    
+
+    public function reviewStore(Request $request, $id)
+    {
+        $user = auth()->user();
+
+        $this->validate($request, [
+            'rating' => 'required|max:5',
+            'comments' => 'required|string|max:255',
+        ]);
+        $existingReview = EmpRating::where([
+            ['rateable_id', $user->id],
+            ['user_id', $id]
+        ])->first();
+
+        if ($existingReview) {
+            $existingReview->update([
+                'rating' => $request->rating,
+                'comments' => $request->comments,
+            ]);
+        } else {
+            $review = new EmpRating();
+            $review->user_id = $id; //employer id from url
+            $review->rateable_id = $user->id;
+            $review->rateable_type = $user->user_type;
+            $review->rating = $request->rating;
+            $review->comments = $request->comments;
+            $review->save();
+        }
+        $employer = Employer::find($id);
+        $user = User::find($employer->user_id);
+        $user->notify(new DatabaseNotification('New Review Added to Your Profile', 'An user had rate and review your profile'));
+        return redirect()->back()->with('flash_msg_success', 'Your review has been submitted Successfully,');
+    }
+
 }
