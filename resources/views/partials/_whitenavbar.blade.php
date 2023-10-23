@@ -6,8 +6,7 @@
             <ul class="flex items-center justify-center">
                 <a href="/"><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
                 <li>
-                    {{-- chg url --}}
-                    <a href="/register/jobseeker" class="text-laravel rounded-lg py-1 font-semibold text-lg pl-10">Applications
+                    <a href="/listings/create" class="text-laravel rounded-lg py-1 font-semibold text-lg pl-10">Post
                     </a>
                 </li>
             </ul>
@@ -112,6 +111,10 @@
                 <a href="/"><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
                 <li>
                     <a href="/listings/create" class="text-laravel rounded-lg py-1 font-semibold text-lg pl-10">Post
+                    </a>
+                </li>
+                <li>
+                    <a href="/employers" class="text-laravel rounded-lg py-1 font-semibold text-xl pl-10">Employers 
                     </a>
                 </li>
             </ul>

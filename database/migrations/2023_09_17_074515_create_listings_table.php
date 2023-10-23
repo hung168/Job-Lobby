@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('description');
             $table->Boolean('reported')->default(0);
             $table->Boolean('verified')->default(0);
+            $table->Boolean('boosted')->default(0);
             $table->integer('slots_available')->default(1);
             $table->timestamps();
         });

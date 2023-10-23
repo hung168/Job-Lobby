@@ -46,6 +46,12 @@ Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware
 //Apply listing
 Route::post('/{listing}/apply', [ListingController::class, 'apply'])->middleware('auth');
 
+//Accept job application
+Route::post('/{userListing}/accept', [ListingController::class, 'acceptJobApplication'])->middleware('auth');
+
+//Reject job application
+Route::post('/{userListing}/reject', [ListingController::class, 'rejectJobApplication'])->middleware('auth');
+
 //Report listing
 Route::post('/listings/{id}/report', [ListingController::class, 'report'])->name('report-listing');
 
@@ -57,6 +63,9 @@ Route::get('/listings/{listing}', [ListingController::class, 'showSingleListing'
 
 //retrieve single job listing
 Route::get('/get-listing/{id}', [ListingController::class, 'retrieveSingleListingData']);
+
+//boost job listing
+Route::post('/listings/{listing}/boost', [ListingController::class, 'boostListing']);
 
 //delete job experience for job seeker
 Route::delete('/delete-job-experience/{experienceId}', [JobseekerController::class, 'deleteJobExperience']);
