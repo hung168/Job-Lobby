@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Jobseeker;
 use App\Models\Address;
+use App\Models\Resume;
 use App\Models\JobseekerJobExperience;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,15 +16,17 @@ use Illuminate\Support\Facades\Validator;
 class JobseekerController extends Controller
 {
     //Show job seeker registration page
-    public function register(){
+    public function register()
+    {
         return view('users.jobseeker_register');
     }
 
     //Create job seeker user
-    public function createNewUser(Request $request){
+    public function createNewUser(Request $request)
+    {
         $formFields = $request->validate([
             'name' => ['required', 'min:3'],
-            'email' => ['required', 'email', Rule::unique('users','email')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => 'required|confirmed|min:6',
         ]);
 
@@ -59,65 +62,103 @@ class JobseekerController extends Controller
     {
         $user = auth()->user(); // Get the currently authenticated user
         $jobSeeker = Jobseeker::where('user_id', $user->id)->first(); // Retrieve the associated JobSeeker record
-        
+
         // Retrieve the Address record associated with the same user_id
         $address = Address::where('user_id', $user->id)->first();
         $jobExperiences = JobseekerJobExperience::where('job_seeker_id', $jobSeeker->user_id)->get();
 
+        //Retrieve the resume associated with the same user_id
+        $resume = Resume::where('user_id', $user->id)->first();
+
+        // symbol change will affect the saving for options, either change all to "
+        // so stick with '
         $options = [
             'StateProvince' => [
-                'Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka', 'Negeri Sembilan',
-                'Pahang', 'Penang', 'Perak', 'Perlis', 'Putrajaya', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu'
+                'Johor',
+                'Kedah',
+                'Kelantan',
+                'Kuala Lumpur',
+                'Labuan',
+                'Melaka',
+                'Negeri Sembilan',
+                'Pahang',
+                'Penang',
+                'Perak',
+                'Perlis',
+                'Putrajaya',
+                'Sabah',
+                'Sarawak',
+                'Selangor',
+                'Terengganu'
             ],
             'Gender' => [
-                'Male', 'Female'
+                'Male',
+                'Female'
             ],
             'EducationLevel' => [
-                'High School', "Bachelor's Degree", "Master's Degree", 'Doctorate'
-            ],
-            'CompanyDressCode' => [
-                'Not Specified', 'Casual (e.g. T-shirts)', 'Business (e.g. Shirts)', 'Formal (e.g. Shirts + Ties)', 'Others (Please Specify)'
+                'High School',
+                'Bachelor’s Degree',
+                'Master’s Degree',
+                'Doctorate'
             ],
             'EmployerBenefits' => [
-                'Health Insurance', 'Dental Coverage', 'Retirement Plan', 'Paid Time Off', 'Parking',
-                'Vision', 'Education Support', 'Allowance', 'Others (Please specify)'
+                'Health Insurance',
+                'Dental Coverage',
+                'Retirement Plan',
+                'Paid Time Off',
+                'Parking',
+                'Vision',
+                'Education Support',
+                'Allowance',
+                'Others (Please specify)'
             ]
+            // 'CompanyDressCode' => [
+            //     'Not Specified', 'Casual (e.g. T-shirts)', 'Business (e.g. Shirts)', 'Formal (e.g. Shirts + Ties)', 'Others (Please Specify)'
+            // ],
         ];
-        
-        
+
+
         $selectedOptions = [
-            'SelectedGender' => $jobSeeker->gender ?? '',
-            'SelectedEducationLevel' => $jobSeeker->education_level ?? '', // Set it to the correct field from the database
-            'SelectedCompanyDressCode' => $jobSeeker->company_dress_code ?? '',
+            // 'SelectedGender' => $jobSeeker->gender,
+            // 'SelectedEducationLevel' => $jobSeeker->education_level,
+            // 'SelectedCompanyDressCode' => $jobSeeker->company_dress_code,
         ];
 
 
-        return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions','jobExperiences'));
+        return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions', 'jobExperiences', 'resume'));
     }
     //update job seeker profile
     public function updateProfile(Request $request)
     {
         $user = auth()->user(); // Get the authenticated user
-        $jobSeeker = Jobseeker::where('user_id', $user->id)->first(); // Find the job seeker record associated with the user
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'gender' => 'required',
+            'date_of_birth' => 'required|date',
+            // 'user_type' => 'required|in:Job Seeker,male', // Adjust as needed
+            'street_address' => 'max:255',
+            'city' => 'max:255',
+            'state_province' => 'required',
+            'nationality' => 'max:255',
+            'postal_code' => 'regex:/^\d{5}$/',
+            'telephone' => 'required|malaysia_phone',
+            'education_level' => 'required',
+            'field_of_major' => 'required',
+            'jobseeker_resume' => 'mimes:csv,txt,xlx,xls,pdf|max:2048',
+        ]);
+        // Find the job seeker record associated with the user
+        $jobSeeker = Jobseeker::where('user_id', $user->id)->first();
 
         // Update the profile picture if a new one is provided
         if ($request->hasFile('jobseeker_profile_pic')) {
             $profilePicPath = $request->file('jobseeker_profile_pic')->store('images', 'public');
             $jobSeeker->update(['jobseeker_profile_pic' => $profilePicPath]);
         }
-        
-        // $request->validate([
-        //     // 'name' => 'required|string|max:255',
-        //     // 'email' => 'required|email|unique:users,email,' . $user->id,
-        //     // 'date_of_birth' => 'required|date',
-        //     // 'user_type' => 'required|in:Job Seeker,male', // Adjust as needed
-        //     'street_address' => 'max:255',
-        //     'city' => 'max:255',
-        //     'state_province' => 'required',
-        //     'nationality' => 'max:255',
-        //     'postal_code' => 'regex:/^\d{5}$/',
-        //     'telephone' => 'required|malaysia_phone',
-        // ]);
+
+        if ($request->hasFile('jobseeker_resume')) {
+            $this->fileUpload($request, $user->name, $user->id);
+        }
 
         // Update the JobSeeker's address
         $jobSeeker->update([
@@ -130,9 +171,10 @@ class JobseekerController extends Controller
             'education_level' => $request->input('education_level'),
             'field_of_major' => $request->input('field_of_major'),
         ]);
-        
+
         $existingAddress = Address::where('user_id', $user->id)->first();
-  
+
+        // Modify address table
         if ($existingAddress) {
             // Address record with the specified user_id exists; update it
             $existingAddress->update([
@@ -149,10 +191,11 @@ class JobseekerController extends Controller
                     'Malaysia',
                 ]),
             ]);
-        
+
             // Update the JobSeeker's address
             $jobSeeker->update([
-                'address' => $existingAddress->address, // Update with existing address
+                'address' => $existingAddress->address,
+                // Update with existing address
             ]);
         } else {
             // Address record with the specified user_id does not exist; create a new one
@@ -171,10 +214,11 @@ class JobseekerController extends Controller
                     'Malaysia',
                 ]),
             ]);
-        
+
             // Update the JobSeeker's information with the new address
             $jobSeeker->update([
-                'address' => $address->address, // Update with new address
+                'address' => $address->address,
+                // Update with new address
             ]);
         }
 
@@ -212,47 +256,71 @@ class JobseekerController extends Controller
                 } else {
                     // Create a new job experience entry
                     JobseekerJobExperience::create([
-                        'job_seeker_id' => auth()->user()->jobSeeker->user_id, // Assuming you have a relationship between User and JobSeeker
+                        'job_seeker_id' => auth()->user()->jobSeeker->user_id,
+                        // Assuming you have a relationship between User and JobSeeker
                         'job_title' => $jobTitle,
                         'company_name' => $companyNames[$key],
                         'job_description' => $jobDescriptions[$key],
                         'start_date' => $startDates[$key],
                         'end_date' => $endDates[$key],
-                        'job_seeker_name' => $jobSeeker->name, // Add the job seeker's name
+                        'job_seeker_name' => $jobSeeker->name,
+                        // Add the job seeker's name
                         // Add other fields as needed
                     ]);
                 }
             }
         }
-
-
         // Redirect back to the profile edit page with a success message
         return redirect('/')->with('success', 'Profile updated successfully');
     }
 
-
     public function deleteJobExperience($experienceId)
     {
-
         try {
-
-            
             // Find the job experience record by its ID
             $jobExperience = JobseekerJobExperience::findOrFail($experienceId);
-    
+
             // Check if the authenticated user owns this job experience (for security)
             if ($jobExperience->job_seeker_id === auth()->user()->jobSeeker->user_id) {
                 // Delete the job experience
                 $jobExperience->delete();
-    
+
                 return response()->json(['success' => true]);
             }
-    
+
             return response()->json(['success' => false, 'message' => 'Unauthorized']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
-    
-    
+
+    protected function fileUpload(Request $request, string $username, string $userId)
+    {
+        // Check if there's an existing resume for the user
+        $existingResume = Resume::where('user_id', auth()->user()->id)->first();
+
+        if ($existingResume) {
+            // Delete the old resume record
+            $existingResume->delete();
+        }
+
+        $fileModel = new Resume;
+        if ($request->file()) {
+            $fileName = time() . '_' . $username . '_Resume';
+            $filePath = $request->file('jobseeker_resume')->storeAs('uploads', $fileName, 'public');
+            $fileModel->user_id = $userId;
+            $fileModel->name = time() . '_' . $username . '_Resume';
+            $fileModel->file_path = '/storage/' . $filePath;
+            $fileModel->save();
+
+        }
+    }
+
+    public function showJobSeekerDetails($id){
+        $jobSeeker = Jobseeker::find($id);
+        $resume = Resume::find($id);
+        $jobExperiences = JobseekerJobExperience::where('job_seeker_id', $jobSeeker->user_id)->get();
+        return view('pages.job_applications_', compact('jobSeeker', 'resume', 'jobExperiences'));
+    }
+
 }

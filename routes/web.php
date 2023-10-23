@@ -97,6 +97,8 @@ Route::get('/employers', [EmployerController::class, 'retrieveEmployerList']);
 //View employer details page
 Route::get('/employers/details/{id}', [EmployerController::class, 'showEmployerDetails'])->name('employer_details');
 
+Route::get('/jobseeker/details/{id}', [JobseekerController::class, 'showJobSeekerDetails'])->name('job_applications_');
+
 //Create new employer account
 Route::post('/createEmployerUser', [EmployerController::class, 'createNewUser']);
 
@@ -108,6 +110,10 @@ Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 
 //Show login page
 Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
+
+//upload resume
+Route::get('/upload-file', [JobseekerController::class, 'createForm']);
+Route::post('/upload-file', [JobseekerController::class, 'fileUpload'])->name('fileUpload');
 
 //Admin module page
 Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->name('admin_module');

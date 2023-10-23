@@ -7,7 +7,7 @@
             <p class="mt-2 text-sm text-gray-600">Fill in your details</p>
         </header>
 
-        <form method="POST" action="/editProfile/{{$jobSeeker->name}}/submit" enctype="multipart/form-data">
+        <form method="POST" action="/editProfile/{{ $jobSeeker->name }}/submit" enctype="multipart/form-data">
             @csrf
             <div class="mx-auto max-w-2xl">
                 <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
@@ -17,17 +17,50 @@
                         <div class="mb-6">
                             @if ($jobSeeker->jobseeker_profile_pic)
                                 <div class="mt-2 text-center">
-                                    <img src="{{ asset('storage/' . $jobSeeker->jobseeker_profile_pic) }}" class="w-40 h-40 rounded-full mx-auto" style="display: block;">
+                                    <img src="{{ asset('storage/' . $jobSeeker->jobseeker_profile_pic) }}"
+                                        class="w-40 h-40 rounded-full mx-auto" style="display: block;">
                                 </div>
                             @endif
-                            <br><label for="jobseeker_profile_pic" class="inline-block text-lg mb-2">Upload Profile Picture</label>
-                            <input type="file" name="jobseeker_profile_pic" id="jobseeker_profile_pic" class="border border-gray-200 rounded p-2 w-full">
+                            <br><label for="jobseeker_profile_pic" class="inline-block text-lg mb-2">Upload Profile
+                                Picture</label>
+                            <input type="file" name="jobseeker_profile_pic" id="jobseeker_profile_pic"
+                                class="border border-gray-200 rounded p-2 w-full">
                             @error('jobseeker_profile_pic')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
-                    
+
+                    <div class="sm:col-span-6">
+                        <!-- Job Seeker Resume -->
+                        <div class="mb-6">
+                            @if ($resume)
+                                <div class="mt-2 text-center">
+                                    <a href="{{ asset($resume->file_path) }}" target="_blank" class="file-link">
+                                        <div class="file-content">
+                                            <div class="file-icon" style="display: inline-flex; align-items: center">                                                
+                                                <i class="far fa-file-pdf fa-3x"></i>
+                                                <label class="file-name" style="margin-left: 1em">{{ $resume->name }}</label>
+                                            </div>
+                                            <div class="file-details">
+                                                <p class="file-info"
+                                                    style="text-decoration: underline; font-weight: bold">View</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endif
+                            <br>
+                            <label for="jobseeker_resume" class="inline-block text-lg mb-2">Upload Resume - only PDF
+                                file</label>
+                            <input type="file" name="jobseeker_resume" id="jobseeker_resume"
+                                class="border border-gray-200 rounded p-2 w-full">
+                            @error('jobseeker_resume')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
                     <!-- Name -->
                     <div class="sm:col-span-3">
                         <x-text-input label="Name" name="name" type="text" :value="$jobSeeker->name" />
@@ -41,7 +74,8 @@
                     <!-- Date of Birth -->
                     <div class="mb-6 sm:col-span-4">
                         <label for="date_of_birth" class="inline-block text-lg mb-2">Date of Birth</label>
-                        <input type="date" class="border border-gray-200 rounded p-2 w-full" name="date_of_birth" value="{{ old('date_of_birth', $jobSeeker->date_of_birth) }}" />
+                        <input type="date" class="border border-gray-200 rounded p-2 w-full" name="date_of_birth"
+                            value="{{ old('date_of_birth', $jobSeeker->date_of_birth) }}" />
                         @error('date_of_birth')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -49,19 +83,19 @@
 
                     <!-- Gender -->
                     <div class="sm:col-span-2">
-                        <x-dropdown name="gender" label="Gender" :options="$options['Gender']" :selected="old('gender', $selectedOptions['SelectedGender'])" />
+                        <x-dropdown name="gender" label="Gender" :options="$options['Gender']" :selected="old('gender', optional($jobSeeker)->gender)" />
                     </div>
-
+                    {{-- $selectedOptions['SelectedGender'] --}}
                     <!-- Job seeker street address -->
                     <div class="sm:col-span-6">
                         <x-text-input name="street_address" label="Street Address" :value="old('street_address', optional($address)->street_address)" />
                     </div>
-                    
+
                     <!-- Job seeker city -->
                     <div class="sm:col-span-2">
                         <x-text-input name="city" label="City" :value="old('city', optional($address)->city)" />
                     </div>
-                    
+
                     <!-- Job seeker state -->
                     <div class="sm:col-span-2">
                         <x-dropdown name="state_province" label="State/Province" :options="$options['StateProvince']" :selected="old('state_province', optional($address)->state_province)" />
@@ -81,7 +115,7 @@
                     <div class="sm:col-span-3">
                         <x-text-input name="nationality" label="Nationality" :value="old('nationality', optional($jobSeeker)->nationality)" />
                     </div>
-                    
+
                     <!-- Job seeker telephone -->
                     <div class="sm:col-span-3">
                         <x-text-input name="telephone" label="Telephone" :value="old('telephone', optional($jobSeeker)->telephone)" />
@@ -89,7 +123,8 @@
 
                     <!-- Job seeker education level -->
                     <div class="sm:col-span-2">
-                        <x-dropdown name="education_level" label="Highest Education Level" :options="$options['EducationLevel']" :selected="old('education_level', $selectedOptions['SelectedEducationLevel'])" />
+                        <x-dropdown name="education_level" label="Highest Education Level" :options="$options['EducationLevel']"
+                            :selected="old('education_level', optional($jobSeeker)->education_level)" />
                     </div>
 
                     <!-- Job seeker field of major -->
@@ -109,25 +144,38 @@
                                 @foreach ($jobExperiences as $experience)
                                     <div class="job-experience mb-4">
                                         <input type="hidden" name="experience_ids[]" value="{{ $experience->id }}">
-                                        <input type="text" name="job_titles[]" placeholder="Job Title" class="border border-gray-200 rounded p-2 w-full" value="{{ old('job_titles.'.$loop->index, $experience->job_title) }}">
-                                        <input type="text" name="company_names[]" placeholder="Company Name" class="border border-gray-200 rounded p-2 w-full" value="{{ old('company_names.'.$loop->index, $experience->company_name) }}">
-                                        <textarea name="job_descriptions[]" placeholder="Job Description" class="border border-gray-200 rounded p-2 w-full">{{ old('job_descriptions.'.$loop->index, $experience->job_description) }}</textarea>
-                                        <input type="date" name="start_dates[]" class="border border-gray-200 rounded p-2 w-full" value="{{ old('start_dates.'.$loop->index, $experience->start_date) }}">
-                                        <input type="date" name="end_dates[]" class="border border-gray-200 rounded p-2 w-full" value="{{ old('end_dates.'.$loop->index, $experience->end_date) }}">
-                                        <button class="remove-experience mt-2 bg-red-500 text-white rounded px-3 py-1 text-sm" type="button" data-experience-id="{{ $experience->id }}">Remove</button>
+                                        <input type="text" name="job_titles[]" placeholder="Job Title"
+                                            class="border border-gray-200 rounded p-2 w-full"
+                                            value="{{ old('job_titles.' . $loop->index, $experience->job_title) }}">
+                                        <input type="text" name="company_names[]" placeholder="Company Name"
+                                            class="border border-gray-200 rounded p-2 w-full"
+                                            value="{{ old('company_names.' . $loop->index, $experience->company_name) }}">
+                                        <textarea name="job_descriptions[]" placeholder="Job Description" class="border border-gray-200 rounded p-2 w-full">{{ old('job_descriptions.' . $loop->index, $experience->job_description) }}</textarea>
+                                        <input type="date" name="start_dates[]"
+                                            class="border border-gray-200 rounded p-2 w-full"
+                                            value="{{ old('start_dates.' . $loop->index, $experience->start_date) }}">
+                                        <input type="date" name="end_dates[]"
+                                            class="border border-gray-200 rounded p-2 w-full"
+                                            value="{{ old('end_dates.' . $loop->index, $experience->end_date) }}">
+                                        <button
+                                            class="remove-experience mt-2 bg-red-500 text-white rounded px-3 py-1 text-sm"
+                                            type="button" data-experience-id="{{ $experience->id }}">Remove</button>
                                     </div>
                                 @endforeach
                             @endif
-                        </div>                    
+                        </div>
                     </div>
                     <div class="sm:col-span-4">
-                        <button id="add-experience" type="button" class="bg-green-500 text-white rounded p-2 py-2 text-lg">Add Job Experience</button>
+                        <button id="add-experience" type="button"
+                            class="bg-green-500 text-white rounded p-2 py-2 text-lg">Add Job Experience</button>
                     </div>
 
                     <!-- Save Button -->
                     <div class="sm:col-span-6 text-center">
-                        <a href="/" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Cancel</a>
-                        <button type="submit" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Save</button>
+                        <a href="/"
+                            class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Cancel</a>
+                        <button type="submit"
+                            class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Save</button>
                     </div>
                 </div>
             </div>
@@ -171,28 +219,28 @@
 
             // Get the CSRF token from the "meta" tag in your HTML
             console.log('Remove experience button clicked');
-            
+
 
             // Send an AJAX request to delete the record from the database
             fetch(`/delete-job-experience/${experienceId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken, // Include the CSRF token in the headers
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // If the record is successfully deleted, remove the corresponding job experience from the page
-                    experienceDiv.remove();
-                } else {
-                    // Handle error or show a notification to the user
-                    console.error('Error deleting record:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting record:', error);
-            });
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken, // Include the CSRF token in the headers
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // If the record is successfully deleted, remove the corresponding job experience from the page
+                        experienceDiv.remove();
+                    } else {
+                        // Handle error or show a notification to the user
+                        console.error('Error deleting record:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting record:', error);
+                });
         } else {
             // If experienceId is empty, simply remove the experience from the form
             experienceDiv.remove();
@@ -208,6 +256,3 @@
         button.addEventListener('click', removeJobExperience);
     });
 </script>
-
-
-
