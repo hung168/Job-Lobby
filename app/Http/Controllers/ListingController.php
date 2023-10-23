@@ -195,11 +195,15 @@ class ListingController extends Controller
     public function report($id)
     {
         $listing = Listing::find($id);
-
+    
         if ($listing) {
-            // Update the 'reported' field to 1
-            $listing->update(['reported' => 1]);
-
+            // Check if 'verified' is 1, then set 'reported' to 0
+            if ($listing->verified == 1) {
+                $listing->update(['reported' => 0]);
+            } else {
+                $listing->update(['reported' => 1]);
+            }
+    
             return redirect()->back()->with('success', 'Listing reported successfully');
         }
     }
