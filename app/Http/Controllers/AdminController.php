@@ -20,7 +20,7 @@ class AdminController extends Controller
     }
 
     //delete listing
-    public function deleteListing(Request $request ,$Id)
+    public function deleteListing($Id)
     {
         try {
             // Find the listing by its ID
@@ -30,24 +30,14 @@ class AdminController extends Controller
             $listing->delete();
 
             // Send Notification
-            $user = User::find($request->user_id);
-            $notification = new DatabaseNotification('test subject', 'test content');
-            $user->notify($notification);
+            $user_id = auth()->user()->id;
+            $user = User::find($user_id);
+            $user->notify(new DatabaseNotification('test subject', 'test content'));
 
-            dd($user);
-            
+            // Get Notifications
             $notifications = $user->notifications;
 
-            // Send Notification
-            $user = User::find($request->user_id);
-            $notification = new DatabaseNotification('test subject', 'test content');
-            $user->notify($notification);
-
-            dd($user);
-            
-            $notifications = $user->notifications;
             return redirect()->route('admin_module')->with(['message' => 'Listing deleted']);
-           
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => 'Listing not found!']);
         }
