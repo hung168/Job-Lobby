@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Listing;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\User;
+use App\Notifications\DatabaseNotification;
 
 class AdminController extends Controller
 {
@@ -26,6 +28,11 @@ class AdminController extends Controller
 
             // Delete listing
             $listing->delete();
+
+            // Send Notification
+            $user_id = auth()->user()->id;
+            $user = User::find($user_id);
+            $user->notify(new DatabaseNotification('test subject', 'test content'));
 
             return redirect()->route('admin_module')->with(['message' => 'Listing deleted']);
         } catch (ModelNotFoundException $e) {
