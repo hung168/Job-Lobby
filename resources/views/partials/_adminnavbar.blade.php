@@ -27,7 +27,7 @@
                             {{ auth()->user()->name }}
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class= "dropdown-item" href="/admin_module">Admin Module</a></li>
+                            <li><a class= "dropdown-item" href="/pages/admin_module">Reported Listings</a></li>
                             <li>
                                 <form class="dropdown-item" method="POST" action="/logout">
                                     @csrf

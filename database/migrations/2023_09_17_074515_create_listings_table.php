@@ -23,8 +23,8 @@ return new class extends Migration
             $table->String('email');
             $table->String('website');
             $table->longText('description');
-            $table->Boolean('reported');
-            $table->Boolean('verified');
+            $table->Boolean('reported')->default(0);
+            $table->Boolean('verified')->default(0);
             $table->timestamps();
         });
     }

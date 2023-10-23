@@ -46,6 +46,9 @@ Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware
 //Apply listing
 Route::post('/{listing}/apply', [ListingController::class, 'apply'])->middleware('auth');
 
+//Report listing
+Route::post('/listings/{id}/report', [ListingController::class, 'report'])->name('report-listing');
+
 //Application listings
 Route::get('/listings/applications', [ListingController::class, 'showApplicationList'])->middleware('auth');
 
@@ -102,3 +105,6 @@ Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->nam
 
 //Admin delete post listing
 Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])->name('deleteListing');
+
+//Admin verify post listing
+Route::patch('/verifyListing/{id}', [AdminController::class, 'verifyListing'])->name('verifyListing');
