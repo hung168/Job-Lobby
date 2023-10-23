@@ -49,7 +49,8 @@ class ListingController extends Controller
             'website'=> 'required',
             'email'=> ['required', 'email'],
             'tags'=> 'required',
-            'description'=> 'required'
+            'description'=> 'required',
+            'slots_available' => 'required|integer|min:1'
 
         ]);
 
@@ -86,7 +87,8 @@ class ListingController extends Controller
             'website'=> 'required',
             'email'=> ['required', 'email'],
             'tags'=> 'required',
-            'description'=> 'required'
+            'description'=> 'required',
+            'slots_available' => 'required|integer|min:1'
 
         ]);
 
