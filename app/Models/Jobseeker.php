@@ -41,4 +41,8 @@ class Jobseeker extends Model
     {
         return $this->hasMany(JobseekerJobExperience::class);
     }
+
+    public function ratings(){
+        return $this->hasOne(EmpRating::class, 'user_id');
+    }
 }

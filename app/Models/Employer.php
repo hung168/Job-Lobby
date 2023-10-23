@@ -43,4 +43,8 @@ class Employer extends Model
     {
         return $this->hasOne(Address::class, 'user_id');
     }
+
+    public function ratings(){
+        return $this->hasMany(EmpRating::class, 'user_id');
+    }
 }

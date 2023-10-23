@@ -115,6 +115,9 @@ Route::get('/login', [UserController::class, 'login'])->name('login')->middlewar
 Route::get('/upload-file', [JobseekerController::class, 'createForm']);
 Route::post('/upload-file', [JobseekerController::class, 'fileUpload'])->name('fileUpload');
 
+//post rating
+Route::post('/employer/rating/{id}', [EmployerController::class, 'reviewStore']);
+
 //Admin module page
 Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->name('admin_module');
 

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('rating'); // Assuming a rating scale from 1 to 5
             $table->longText('comments')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
