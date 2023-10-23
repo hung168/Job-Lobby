@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Jobseeker;
 use App\Models\Address;
+use App\Models\Resume;
 use App\Models\JobseekerJobExperience;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,6 +67,9 @@ class JobseekerController extends Controller
         $address = Address::where('user_id', $user->id)->first();
         $jobExperiences = JobseekerJobExperience::where('job_seeker_id', $jobSeeker->user_id)->get();
 
+        //Retrieve the resume associated with the same user_id
+        $resume = Resume::where('user_id', $user->id)->first();
+
         // symbol change will affect the saving for options, either change all to "
         // so stick with '
         $options = [
@@ -121,7 +125,7 @@ class JobseekerController extends Controller
         ];
 
 
-        return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions', 'jobExperiences'));
+        return view('users.jobseeker_profile_edit', compact('jobSeeker', 'address', 'options', 'selectedOptions', 'jobExperiences', 'resume'));
     }
     //update job seeker profile
     public function updateProfile(Request $request)
@@ -141,29 +145,20 @@ class JobseekerController extends Controller
             'telephone' => 'required|malaysia_phone',
             'education_level' => 'required',
             'field_of_major' => 'required',
+            'jobseeker_resume' => 'mimes:csv,txt,xlx,xls,pdf|max:2048',
         ]);
         // Find the job seeker record associated with the user
         $jobSeeker = Jobseeker::where('user_id', $user->id)->first();
-        $jobSeeker = Jobseeker::where('user_id', $user->id)->first(); // Find the job seeker record associated with the user
 
         // Update the profile picture if a new one is provided
         if ($request->hasFile('jobseeker_profile_pic')) {
             $profilePicPath = $request->file('jobseeker_profile_pic')->store('images', 'public');
             $jobSeeker->update(['jobseeker_profile_pic' => $profilePicPath]);
         }
-        
-        // $request->validate([
-        //     // 'name' => 'required|string|max:255',
-        //     // 'email' => 'required|email|unique:users,email,' . $user->id,
-        //     // 'date_of_birth' => 'required|date',
-        //     // 'user_type' => 'required|in:Job Seeker,male', // Adjust as needed
-        //     'street_address' => 'max:255',
-        //     'city' => 'max:255',
-        //     'state_province' => 'required',
-        //     'nationality' => 'max:255',
-        //     'postal_code' => 'regex:/^\d{5}$/',
-        //     'telephone' => 'required|malaysia_phone',
-        // ]);
+
+        if ($request->hasFile('jobseeker_resume')) {
+            $this->fileUpload($request, $user->name, $user->id);
+        }
 
         // Update the JobSeeker's address
         $jobSeeker->update([
@@ -299,21 +294,25 @@ class JobseekerController extends Controller
         }
     }
 
-    protected function fileUpload(Request $request, User $user)
+    protected function fileUpload(Request $request, string $username, string $userId)
     {
-        $request->validate([
-            'file' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
-        ]);
-        $fileModel = new File;
+        // Check if there's an existing resume for the user
+        $existingResume = Resume::where('user_id', auth()->user()->id)->first();
+
+        if ($existingResume) {
+            // Delete the old resume record
+            $existingResume->delete();
+        }
+
+        $fileModel = new Resume;
         if ($request->file()) {
-            $fileName = time() . '_' . $user->name.'_Resume';
-            $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
-            $fileModel->name = time() . '_' . $request->file->getClientOriginalName();
+            $fileName = time() . '_' . $username . '_Resume';
+            $filePath = $request->file('jobseeker_resume')->storeAs('uploads', $fileName, 'public');
+            $fileModel->user_id = $userId;
+            $fileModel->name = time() . '_' . $username . '_Resume';
             $fileModel->file_path = '/storage/' . $filePath;
             $fileModel->save();
-            return back()
-                ->with('success', 'File has been uploaded.')
-                ->with('file', $fileName);
+
         }
     }
 }
