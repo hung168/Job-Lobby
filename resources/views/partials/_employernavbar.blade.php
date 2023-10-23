@@ -6,8 +6,7 @@
                     <img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" />
                 </a>
                 <li>
-                    {{-- chg url --}}
-                    <a href="/register/jobseeker" class="text-white rounded-lg py-1 font-semibold text-lg pl-10">Applications
+                    <a href="/listings/create" class="text-white rounded-lg py-1 font-semibold text-lg pl-10">Post
                     </a>
                 </li>
             </ul>
