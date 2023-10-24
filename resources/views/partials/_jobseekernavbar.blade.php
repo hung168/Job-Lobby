@@ -20,7 +20,7 @@
                 </span>
                 @else
                 <!-- Show content for regular login -->
-                <x-notifications-dropdown--blue :notifications="$notifications" />
+                <x-notifications-dropdown--white :notifications="$notifications" />
                 <div class="dropdown">
                     <button class="text-white rounded-lg py-1 px-2 font-semibold" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center;">
                         <span class="mr-1">

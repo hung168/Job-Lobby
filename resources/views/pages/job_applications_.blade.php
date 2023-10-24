@@ -99,7 +99,7 @@
                 </dl>
             </div><br>
             <div class="sm:col-span-6 text-center">
-                <a href="/employers" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Back</a>
+                <a href="{{ URL::previous() }}" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Back</a>
             </div>
     </div>
     </x-card>

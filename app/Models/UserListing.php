@@ -22,4 +22,13 @@ class UserListing extends Model
     {
         return $this->belongsTo(Listing::class, 'listing_id');
     }
+
+    public static function getStatus($user_id, $listing_id) {
+        $listingStatus = UserListing::where('user_id', $user_id)
+            ->where('listing_id', $listing_id)
+            ->first();
+
+        return $listingStatus ? $listingStatus->status : null;
+    }
+
 }
