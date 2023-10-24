@@ -20,17 +20,15 @@ class JobseekerFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->create()->id, // Create a user and use its ID as the foreign key
-            'name' => $faker->name,
-            'address' => $faker->address,
-            'date_of_birth' => $faker->date,
-            'gender' => $faker->randomElement(['Male', 'Female']),
-            'nationality' => $faker->country,
-            'email' => $faker->unique()->safeEmail,
-            'telephone' => $faker->phoneNumber,
-            'field_of_major' => $faker->word,
-            'education_level' => $faker->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
+            'name' => fake()->name,
+            'address' => fake()->streetAddress . ', ' . fake()->city . ', ' . fake()->state . ', ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
+            'date_of_birth' => fake()->date,
+            'gender' => fake()->randomElement(['Male', 'Female']),
+            'nationality' => fake()->country,
+            'email' => fake()->unique()->safeEmail,
+            'telephone' => fake()->phoneNumber,
+            'field_of_major' => fake()->word,
+            'education_level' => fake()->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
         ];
     }
-
 }

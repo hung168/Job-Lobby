@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_seekers', function (Blueprint $table) {
+        Schema::create('jobseekers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
             $table->string('jobseeker_profile_pic')->nullable(); // profile picture
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_seekers');
+        Schema::dropIfExists('jobseekers');
     }
 };

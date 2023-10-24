@@ -20,7 +20,6 @@ class EmployerFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->create()->id,
             'name' => fake()->name,
             'email' => fake()->unique()->safeEmail,
             'function_title' => fake()->jobTitle,
@@ -29,16 +28,14 @@ class EmployerFactory extends Factory
             'company_industry' => fake()->word,
             'company_overview' => fake()->sentence,
             'company_registration_number' => fake()->numerify('##########'),
-            'address' => fake()->address,
+            'address' => fake()->streetAddress . ', ' . fake()->city . ', ' . fake()->state . ', ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
             'company_contact_number' => fake()->phoneNumber,
             'company_website' => fake()->url,
             'company_size' => fake()->randomElement(['Small', 'Medium', 'Large']),
             'company_working_hour' => fake()->randomElement(['Full-time', 'Part-time']),
             'company_dress_code' => fake()->sentence,
             'company_benefits' => fake()->sentence,
-            
+
         ];
     }
-
-
 }

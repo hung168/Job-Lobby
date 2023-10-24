@@ -16,9 +16,13 @@ class ListingFactory extends Factory
      */
     public function definition(): array
     {
+        $developerWordList = ['backend', 'API', 'database', 'C++', 'python', 'C#', 'testing', 'Java'];
+        shuffle($developerWordList);
+        $randomWords = array_slice($developerWordList, 0, 3);
+
         return [
             'title' => $this->faker->sentence(),
-            'tags' => 'laravel, api, backend',
+            'tags' => implode(', ', $randomWords),
             'company' => $this->faker->company(),
             'email' => $this->faker->companyEmail(),
             'website' => $this->faker->url(),
@@ -32,6 +36,7 @@ class ListingFactory extends Factory
                 // If 'reported' is 1, set 'verified' to 0; otherwise, keep the random value
                 return $verified && rand(0, 1) === 1 ? 0 : $verified;
             },
+            'boosted' => rand(0, 1),
         ];
     }
 }

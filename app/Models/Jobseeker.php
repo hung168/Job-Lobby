@@ -9,22 +9,21 @@ class Jobseeker extends Model
 {
     use HasFactory;
 
-    protected $table = 'job_seekers';
+    protected $table = 'jobseekers';
 
     protected $fillable = [
         'id',
         'user_id',
         'jobseeker_profile_pic',
-        'address',
         'name',
-        'email',
-        'gender',
+        'address',
         'date_of_birth',
-        'country',
+        'gender',
         'nationality',
+        'email',
         'telephone',
-        'education_level',
         'field_of_major',
+        'education_level',
     ];
 
     public function address()

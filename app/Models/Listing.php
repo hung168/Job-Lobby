@@ -30,7 +30,4 @@ class Listing extends Model
     {
         return $this->belongsTo(Employer::class, 'employer_user_id');
     }
-
-
-
 }
