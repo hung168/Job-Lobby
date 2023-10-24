@@ -29,11 +29,6 @@ class AdminController extends Controller
             // Delete listing
             $listing->delete();
 
-            // Send Notification
-            $user_id = auth()->user()->id;
-            $user = User::find($user_id);
-            $user->notify(new DatabaseNotification('test subject', 'test content'));
-
             return redirect()->route('admin_module')->with(['message' => 'Listing deleted']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => 'Listing not found!']);
