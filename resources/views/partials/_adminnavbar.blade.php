@@ -3,7 +3,7 @@
         <div class="relative flex h-16 items-center justify-between">
             <ul class="flex items-center justify-center">
                 <a href="/">
-                    <img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" />
+                    <img class="w-16 max-h-16" src="{{asset('images/Logo.png')}}" alt="" class="logo" />
                 </a>
                 <li>
                     {{-- chg url --}}

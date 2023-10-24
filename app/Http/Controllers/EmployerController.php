@@ -178,7 +178,7 @@ class EmployerController extends Controller
             'function_title' => 'required|string',
             'company_name' => 'required|string',
             'company_industry' => 'required|string',
-            'company_contact_number' => 'required|regex:/^\(\d{3}\) \d{3}-\d{4}$/',
+            'company_contact_number' => 'required|numeric|regex:/^[0-9+-\s()]*$/|min:10',
             'company_overview' => 'required|string',
             'company_registration_number' => 'required|integer',
             'company_website' => 'nullable|url',
@@ -282,14 +282,14 @@ class EmployerController extends Controller
     public function reviewStore(Request $request, $id)
     {
         $user = auth()->user();
-
+        $employer = Employer::find($id);
         $this->validate($request, [
             'rating' => 'required|max:5',
             'comments' => 'required|string|max:255',
         ]);
         $existingReview = EmpRating::where([
             ['rateable_id', $user->id],
-            ['user_id', $id]
+            ['user_id', $employer->user_id]
         ])->first();
 
         if ($existingReview) {
@@ -299,14 +299,13 @@ class EmployerController extends Controller
             ]);
         } else {
             $review = new EmpRating();
-            $review->user_id = $id; //employer id from url
+            $review->user_id = $employer->user_id; //employer id from url
             $review->rateable_id = $user->id;
             $review->rateable_type = $user->user_type;
             $review->rating = $request->rating;
             $review->comments = $request->comments;
             $review->save();
         }
-        $employer = Employer::find($id);
         $user = User::find($employer->user_id);
         $user->notify(new DatabaseNotification('New Review Added to Your Profile', 'An user had rate and review your profile'));
         return redirect()->back()->with('flash_msg_success', 'Your review has been submitted Successfully,');
