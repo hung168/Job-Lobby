@@ -260,7 +260,7 @@ class ListingController extends Controller
                 $listing = Listing::find($listingId);
                 $listing->decrement('slots_available', 1); // Reduce the available slots by 1
                 $user = User::find($userId);
-                $notificationMessage = "Your application for $userListing->title has been rejected";
+                $notificationMessage = "Your application for $listing->title has been accepted";
                 $user->notify(new DatabaseNotification('Application Accepted', $notificationMessage));
                 return redirect()->back()->with('success', 'Job application has been accepted.');
             } else {

@@ -38,7 +38,7 @@
             </ul>
             @elseif (auth()->user()->user_type == 'Job Seeker')
             <ul class="flex items-center justify-center">
-                <a href="/"><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
+                <a href="/"><img class="w-16 max-h-16" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
                 <li>
                     <a href="/" class="text-laravel rounded-lg py-1 font-semibold text-xl pl-10">Jobs
                     </a>
@@ -76,7 +76,7 @@
             </ul>
             @elseif (auth()->user()->user_type == 'Admin')
             <ul class="flex items-center justify-center">
-                <a href="/"><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
+                <a href="/"><img class="w-16 max-h-16" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
                 <li>
                     <a href="/" class="text-laravel rounded-lg py-1 font-semibold text-xl pl-10">Jobs
                     </a>
@@ -108,7 +108,7 @@
             @endif
             @else
             <ul class="flex items-center justify-center">
-                <a href="/"><img class="w-24" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
+                <a href="/"><img class="w-16 max-h-16" src="{{asset('images/Logo.png')}}" alt="" class="logo" /></a>
                 <li>
                     <a href="/listings/create" class="text-laravel rounded-lg py-1 font-semibold text-lg pl-10">Post
                     </a>
