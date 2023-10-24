@@ -248,7 +248,7 @@ class ListingController extends Controller
             if ($userListing) {
                 $userListing->update(['status' => 'Accepted']); // Modify the status here
                 $user = User::find($userId);
-                $notificationMessage = "Your application for $listing->title has been rejected";
+                $notificationMessage = "Your application for $userListing->title has been rejected";
                 $user->notify(new DatabaseNotification('Application Accepted', $notificationMessage));
                 return redirect()->back()->with('success', 'Job application has been accepted.');
             } else {
