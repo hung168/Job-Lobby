@@ -20,6 +20,7 @@ class JobseekerFactory extends Factory
     public function definition(): array
     {
         return [
+            'jobseeker_profile_pic' => 'images/jobseeker.png',
             'name' => fake()->name,
             'address' => fake()->streetAddress . ', ' . fake()->city . ', ' . fake()->state . ', ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
             'date_of_birth' => fake()->date,

@@ -22,6 +22,7 @@ class ListingFactory extends Factory
 
         return [
             'title' => $this->faker->sentence(),
+            'logo' => 'logos/company.png',
             'tags' => implode(', ', $randomWords),
             'company' => $this->faker->company(),
             'email' => $this->faker->companyEmail(),

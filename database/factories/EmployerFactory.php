@@ -20,6 +20,7 @@ class EmployerFactory extends Factory
     public function definition(): array
     {
         return [
+            'employer_profile_pic' => 'images/employer.png',
             'name' => fake()->name,
             'email' => fake()->unique()->safeEmail,
             'function_title' => fake()->jobTitle,
