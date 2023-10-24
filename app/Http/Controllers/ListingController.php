@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Models\UserListing;
 use App\Models\Employer;
 use App\Models\Jobseeker;
+use App\Models\User;
+use App\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -23,6 +25,7 @@ class ListingController extends Controller
             'listings' => Listing::latest()
                 ->filter(request(['tag', 'search']))
                 ->whereNotIn('id', $excludeUserListings)
+                ->orderBy('boosted', 'desc') 
                 ->paginate(8)
         ]);
     }
@@ -31,31 +34,26 @@ class ListingController extends Controller
     //Show single listing
     public function showSingleListing(Listing $listing) {
         $user = auth()->user();
-    
+        
         if ($user->user_type === 'Employer') {
-    
             // Get the list of user_id values where listing_id matches the current listing's ID
             $userIds = UserListing::where('listing_id', $listing->id)
-            ->where('status', 'Job Application In Review')
-            ->pluck('user_id')
-            ->toArray();
-    
+                ->pluck('user_id')
+                ->toArray();
+
             $jobseekerDetails = Jobseeker::whereIn('user_id', $userIds)->get();
 
             return view('listings.show', [
                 'listing' => $listing,
                 'jobseekerDetails' => $jobseekerDetails,
             ]);
-
         }
 
-        
-    
+        // For non-employer users, just fetch the listing
         return view('listings.show', [
             'listing' => $listing,
         ]);
     }
-    
 
     //Show single listing
     public function retrieveSingleListingData($id) {
@@ -183,7 +181,12 @@ class ListingController extends Controller
                 'listing_id' => $listing,
                 'status' => "Job Application In Review",
             ]);
-    
+
+            $listingsDetails = Listing::find($listing);
+            $employer = User::find($listingsDetails->employer_user_id);
+            $notificationMessage = "A jobseeker has applied for $listingsDetails->title";
+            $employer->notify(new DatabaseNotification('Job Application', $notificationMessage));
+
             // Redirect with a success message
             return redirect('/')->with('message', 'Your job application has been submitted.');
         } else {
@@ -230,30 +233,60 @@ class ListingController extends Controller
         }
     }
 
-    public function acceptJobApplication(UserListing $userListing)
+    public function acceptJobApplication(Request $request)
     {
-        // Check if the currently authenticated user is authorized to accept the job application
+        // Check if the currently authenticated user is authorized to reject the job application
         if (auth()->user()->user_type === 'Employer') {
-            // Update the status of the job application to "Accepted" (You can customize this status as needed)
-            $userListing->update(['status' => 'Accepted']);
 
-            return redirect()->back()->with('success', 'Job application has been accepted.');
+            $userId = $request->input('user_id');
+            $listingId = $request->input('listing_id');
+            // Find the UserListing record based on the user ID and listing ID
+            $userListing = UserListing::where('user_id', $userId)
+                ->where('listing_id', $listingId)
+                ->first();
+    
+            if ($userListing) {
+                $userListing->update(['status' => 'Accepted']); // Modify the status here
+                $user = User::find($userId);
+                $notificationMessage = "Your application for $listing->title has been rejected";
+                $user->notify(new DatabaseNotification('Application Accepted', $notificationMessage));
+                return redirect()->back()->with('success', 'Job application has been accepted.');
+            } else {
+                return redirect()->back()->with('error', 'User Listing not found.');
+            }
         } else {
             return redirect()->back()->with('error', 'You are not authorized to accept this job application.');
         }
     }
 
-    public function rejectJobApplication(UserListing $userListing)
+    public function rejectJobApplication(Request $request)
     {
         // Check if the currently authenticated user is authorized to reject the job application
         if (auth()->user()->user_type === 'Employer') {
-            // Update the status of the job application to "Rejected" (You can customize this status as needed)
-            $userListing->update(['status' => 'Rejected']);
 
-            return redirect()->back()->with('success', 'Job application has been rejected.');
+            $userId = $request->input('user_id');
+            $listingId = $request->input('listing_id');
+            // Find the UserListing record based on the user ID and listing ID
+            $userListing = UserListing::where('user_id', $userId)
+                ->where('listing_id', $listingId)
+                ->first();
+
+            $listing = Listing::find($listingId);
+
+    
+            if ($userListing) {
+                $userListing->update(['status' => 'Rejected']); // Modify the status here
+                $user = User::find($userId);
+                $notificationMessage = "Your application for $listing->title has been rejected";
+                $user->notify(new DatabaseNotification('Application Rejected', $notificationMessage));
+                return redirect()->back()->with('success', 'Job application has been rejected.');
+            } else {
+                return redirect()->back()->with('error', 'User Listing not found.');
+            }
         } else {
             return redirect()->back()->with('error', 'You are not authorized to reject this job application.');
         }
     }
+    
 
 }
