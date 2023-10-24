@@ -59,22 +59,22 @@ Route::post('/listings/{id}/report', [ListingController::class, 'report'])->name
 Route::get('/listings/applications', [ListingController::class, 'showApplicationList'])->middleware('auth');
 
 //single job listing
-Route::get('/listings/{listing}', [ListingController::class, 'showSingleListing']);
+Route::get('/listings/{listing}', [ListingController::class, 'showSingleListing'])->middleware('auth');
 
 //retrieve single job listing
-Route::get('/get-listing/{id}', [ListingController::class, 'retrieveSingleListingData']);
+Route::get('/get-listing/{id}', [ListingController::class, 'retrieveSingleListingData'])->middleware('auth');
 
 //boost job listing
-Route::post('/listings/{listing}/boost', [ListingController::class, 'boostListing']);
+Route::post('/listings/{listing}/boost', [ListingController::class, 'boostListing'])->middleware('auth');
 
 //delete job experience for job seeker
-Route::delete('/delete-job-experience/{experienceId}', [JobseekerController::class, 'deleteJobExperience']);
+Route::delete('/delete-job-experience/{experienceId}', [JobseekerController::class, 'deleteJobExperience'])->middleware('auth');
 
 //Show job seeker registration page
 Route::get('/register/jobseeker', [JobseekerController::class, 'register'])->middleware('guest');
 
 //Show job seeker edit profile page
-Route::get('/editProfile/{jobSeekerName}/JobSeeker', [JobseekerController::class, 'editProfile']);
+Route::get('/editProfile/{jobSeekerName}/JobSeeker', [JobseekerController::class, 'editProfile'])->middleware('auth');
 
 //Submit job seeker edit profile
 Route::post('/editProfile/{jobSeekerName}/submit', [JobseekerController::class, 'updateProfile'])->middleware('auth');
@@ -119,13 +119,13 @@ Route::post('/upload-file', [JobseekerController::class, 'fileUpload'])->name('f
 Route::post('/employer/rating/{id}', [EmployerController::class, 'reviewStore']);
 
 //Admin module page
-Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->name('admin_module');
+Route::get('/pages/admin_module', [AdminController::class, 'admin_module'])->name('admin_module')->middleware('auth');
 
 //Admin delete post listing
-Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])->name('deleteListing');
+Route::delete('/deleteListing/{id}', [AdminController::class, 'deleteListing'])->name('deleteListing')->middleware('auth');
 
 //Admin verify post listing
-Route::patch('/verifyListing/{id}', [AdminController::class, 'verifyListing'])->name('verifyListing');
+Route::patch('/verifyListing/{id}', [AdminController::class, 'verifyListing'])->name('verifyListing')->middleware('auth');
 
 //Filter listing
-Route::post('/filter_listings', [ListingController::class, 'filterListings'])->name('filter_listings');
+Route::post('/filter_listings', [ListingController::class, 'filterListings'])->name('filter_listings')->middleware('auth');

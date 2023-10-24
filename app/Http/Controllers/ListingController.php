@@ -18,23 +18,25 @@ class ListingController extends Controller
 {
     //show all listings
 
-    public function index() {
+    public function index()
+    {
         $excludeUserListings = UserListing::where('user_id', auth()->id())->pluck('listing_id');
-    
+
         return view('listings.index', [
             'listings' => Listing::latest()
                 ->filter(request(['tag', 'search']))
                 ->whereNotIn('id', $excludeUserListings)
-                ->orderBy('boosted', 'desc') 
+                ->where('slots_available', '>', 0)
+                ->orderBy('boosted', 'desc')
                 ->paginate(8)
         ]);
     }
-    
 
     //Show single listing
-    public function showSingleListing(Listing $listing) {
+    public function showSingleListing(Listing $listing)
+    {
         $user = auth()->user();
-        
+
         if ($user->user_type === 'Employer') {
             // Get the list of user_id values where listing_id matches the current listing's ID
             $userIds = UserListing::where('listing_id', $listing->id)
@@ -56,31 +58,34 @@ class ListingController extends Controller
     }
 
     //Show single listing
-    public function retrieveSingleListingData($id) {
+    public function retrieveSingleListingData($id)
+    {
         $listing = Listing::find($id);
         return response()->json($listing);
     }
 
-    public function create() {
+    public function create()
+    {
         return view('listings.create');
     }
 
     //store listing data
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $formFields = $request->validate([
-            'title'=> 'required',
-            'company'=> ['required'],
-            'academic_field'=> 'required',
-            'location'=> 'required',
-            'website'=> 'required',
-            'email'=> ['required', 'email'],
-            'tags'=> 'required',
-            'description'=> 'required',
+            'title' => 'required',
+            'company' => ['required'],
+            'academic_field' => 'required',
+            'location' => 'required',
+            'website' => 'required',
+            'email' => ['required', 'email'],
+            'tags' => 'required',
+            'description' => 'required',
             'slots_available' => 'required|integer|min:1'
 
         ]);
 
-        if($request->hasFIle('logo')){
+        if ($request->hasFIle('logo')) {
             $formFields['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
@@ -94,31 +99,33 @@ class ListingController extends Controller
     }
 
     //edit listing data
-    public function edit(Listing $listing){
-        return view('listings.edit',['listing'=>$listing]);
+    public function edit(Listing $listing)
+    {
+        return view('listings.edit', ['listing' => $listing]);
     }
 
     //update listing data
-    public function update(Request $request, Listing $listing) {
+    public function update(Request $request, Listing $listing)
+    {
 
-        if($listing->employer_user_id != auth()->id()){
+        if ($listing->employer_user_id != auth()->id()) {
             abort(403, 'Unauthorized action');
         }
 
         $formFields = $request->validate([
-            'title'=> 'required',
-            'company'=> ['required'],
-            'academic_field'=> 'required',
-            'location'=> 'required',
-            'website'=> 'required',
-            'email'=> ['required', 'email'],
-            'tags'=> 'required',
-            'description'=> 'required',
+            'title' => 'required',
+            'company' => ['required'],
+            'academic_field' => 'required',
+            'location' => 'required',
+            'website' => 'required',
+            'email' => ['required', 'email'],
+            'tags' => 'required',
+            'description' => 'required',
             'slots_available' => 'required|integer|min:1'
 
         ]);
 
-        if($request->hasFIle('logo')){
+        if ($request->hasFIle('logo')) {
             $formFields['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
@@ -128,23 +135,25 @@ class ListingController extends Controller
     }
 
     //update listing data
-    public function delete(Listing $listing){
+    public function delete(Listing $listing)
+    {
         $listing->delete();
         return redirect('/')->with('message', 'Listing Deleted successfully!');
     }
 
-    public function manage(){
+    public function manage()
+    {
         // Get the currently authenticated user
         $user = auth()->user();
-        
+
         // Check if the user is of type 'Employer'
         if ($user->user_type === 'Employer') {
             // Retrieve the listings associated with the employer
             $listings = Listing::where('employer_user_id', $user->id)->get();
-        
+
             return view('listings.manage', compact('listings'));
         }
-    
+
         // Handle the case where the user is not an employer (optional)
         // You can redirect or show an error message.
         return redirect('/')->with('error', 'Access denied.');
@@ -154,27 +163,27 @@ class ListingController extends Controller
     {
         // Get the currently authenticated job seeker
         $user = auth()->user();
-        
+
         // Check if the user is of type 'Job Seeker'
         if ($user->user_type === 'Job Seeker') {
             // Retrieve the job applications associated with the job seeker
             $applications = UserListing::where('user_id', $user->id)->with('listing')->get();
             return view('listings.application', compact('applications'));
         }
-    
+
         // Handle the case where the user is not a job seeker (optional)
         // You can redirect or show an error message.
         return redirect('/')->with('error', 'Access denied.');
     }
-    
-    
+
+
 
     public function apply(Request $request, $listing)
     {
         // Check if the user is authenticated (signed in)
         if (Auth::check()) {
             // User is signed in, proceed with the job application
-    
+
             // Create a new job application using the create() method
             UserListing::create([
                 'user_id' => auth()->user()->id,
@@ -244,11 +253,14 @@ class ListingController extends Controller
             $userListing = UserListing::where('user_id', $userId)
                 ->where('listing_id', $listingId)
                 ->first();
-    
+
             if ($userListing) {
                 $userListing->update(['status' => 'Accepted']); // Modify the status here
+                // Find the associated Listing
+                $listing = Listing::find($listingId);
+                $listing->decrement('slots_available', 1); // Reduce the available slots by 1
                 $user = User::find($userId);
-                $notificationMessage = "Your application for $listing->title has been rejected";
+                $notificationMessage = "Your application for $userListing->title has been rejected";
                 $user->notify(new DatabaseNotification('Application Accepted', $notificationMessage));
                 return redirect()->back()->with('success', 'Job application has been accepted.');
             } else {
@@ -273,7 +285,7 @@ class ListingController extends Controller
 
             $listing = Listing::find($listingId);
 
-    
+
             if ($userListing) {
                 $userListing->update(['status' => 'Rejected']); // Modify the status here
                 $user = User::find($userId);
@@ -287,6 +299,4 @@ class ListingController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to reject this job application.');
         }
     }
-    
-
 }
