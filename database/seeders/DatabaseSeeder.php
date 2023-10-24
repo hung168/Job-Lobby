@@ -8,6 +8,7 @@ use App\Models\Listing;
 use App\Models\Jobseeker;
 use App\Models\Employer;
 use App\Models\Address;
+use App\Models\EmpRating;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -69,6 +70,19 @@ class DatabaseSeeder extends Seeder
                 'country' => $addressParts[4],
             ]);
         });
+
+        // Create Rating for Employer
+        $employers = User::where('user_type', 'employer')->get();
+        $jobSeekerIds = User::where('user_type', 'job seeker')->pluck('id')->toArray();
+        foreach ($employers as $employer){
+            EmpRating::create([
+                'user_id' => $employer->id,
+                'rateable_id' => $jobSeekerIds[array_rand($jobSeekerIds)],
+                'rateable_type' => 'Job Seeker', // Set the rateable_type to the Jobseeker model
+                'rating' => rand(1, 5), // Generate a random rating
+                'comments' => 'The employer is reviewed by me',
+            ]);
+        }
 
         // Create 1 Admin user
         DB::table('users')->insert([

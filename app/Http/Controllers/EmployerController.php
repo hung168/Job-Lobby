@@ -31,7 +31,7 @@ class EmployerController extends Controller
     public function showEmployerDetails($id)
     {
         $employer = Employer::find($id);
-        $empRating = EmpRating::where('user_id', $id)
+        $empRating = EmpRating::where('user_id', $employer->user_id)
             ->join('users', 'users.id', '=', 'review_and_rating.rateable_id')
             ->select('review_and_rating.*', 'users.name as user_name')
             ->get();
