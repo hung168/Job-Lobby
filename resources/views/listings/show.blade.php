@@ -48,6 +48,10 @@
                             <dt class="text-sm font-medium leading-6 text-gray-900">About</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{$listing->description}}</dd>
                         </div>
+                        @php
+                            $checkIfApplied = App\Models\UserListing::checkIfApplied(auth()->user()->id, $listing->id);
+                        @endphp
+
                         @auth
                             @if(($listing->employer_user_id == auth()->user()->id) && (auth()->user()->user_type == 'Employer'))
                                 <div class="flex items-center justify-center space-x-4">
@@ -67,7 +71,7 @@
                                     
                                     
                                 </div>
-                            @elseif (auth()->user()->user_type == 'Job Seeker')       
+                            @elseif (auth()->user()->user_type == 'Job Seeker' && $checkIfApplied == false)       
                                 <div class="p-10 flex items-center justify-center space-x-10">
                                     <form method="POST" action="{{ url('/' . $listing->id . '/apply') }}">
                                         @csrf
@@ -78,6 +82,8 @@
                                         </div>
                                     </form>
                                 </div>
+                            @elseif ($checkIfApplied == true){
+                            }
                             @endif
                         @else
                             <div class="p-10 flex items-center justify-center space-x-10">

@@ -30,4 +30,15 @@ class UserListing extends Model
         return $listingStatus ? $listingStatus->status : null;
     }
 
+    public static function checkIfApplied($user_id, $listing_id) {
+        $listing = UserListing::where('user_id', $user_id)
+            ->where('listing_id', $listing_id)
+            ->first();
+        if ($listing == null)
+        {
+            return false;
+        }
+            return true;
+    }
+
 }
