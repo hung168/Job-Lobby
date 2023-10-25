@@ -22,14 +22,14 @@ class JobseekerFactory extends Factory
         return [
             'jobseeker_profile_pic' => 'images/jobseeker.png',
             'name' => fake()->name,
-            'address' => fake()->streetAddress . ', ' . fake()->city . ', ' . fake()->state . ', ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
+            'address' => fake()->streetAddress . ', ' . fake()->city . ',Kuala Lumpur, ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
             'date_of_birth' => fake()->date,
             'gender' => fake()->randomElement(['Male', 'Female']),
             'nationality' => fake()->country,
             'email' => fake()->unique()->safeEmail,
             'telephone' => '01' . fake()->regexify('[2-9]{8}'),
             'field_of_major' => fake()->word,
-            'education_level' => fake()->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
+            'education_level' => fake()->randomElement(['High School', 'Bachelor’s Degree', 'Master’s Degree', 'Doctorate']),
         ];
     }
 }

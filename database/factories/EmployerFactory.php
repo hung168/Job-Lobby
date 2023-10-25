@@ -29,7 +29,7 @@ class EmployerFactory extends Factory
             'company_industry' => fake()->word,
             'company_overview' => fake()->sentence,
             'company_registration_number' => fake()->numerify('##########'),
-            'address' => fake()->streetAddress . ', ' . fake()->city . ', ' . fake()->state . ', ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
+            'address' => fake()->streetAddress . ', ' . fake()->city . ',Kuala Lumpur,' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
             'company_contact_number' => '05' . fake()->regexify('[2-9]{7}'),
             'company_website' => fake()->url,
             'company_size' => fake()->randomElement(['Small', 'Medium', 'Large']),
