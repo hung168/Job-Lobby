@@ -27,7 +27,8 @@ class ListingController extends Controller
                 ->filter(request(['tag', 'search']))
                 ->whereNotIn('id', $excludeUserListings)
                 ->where('slots_available', '>', 0)
-                ->orderBy('boosted', 'desc')
+                ->orderBy('boosted', 'desc') // Sort boosted listings first
+                ->orderBy('created_at', 'desc') // Sort by created_at in descending order
                 ->paginate(8)
         ]);
     }
@@ -208,11 +209,12 @@ class ListingController extends Controller
     {
         $listing = Listing::find($id);
 
-        if ($listing) {
+        if ($listing->verified == 1) {
+            return redirect('/')->with('message', $listing->title . ' is safe! Verified by Admin');
+        } else {
             // Update the 'reported' field to 1
             $listing->update(['reported' => 1]);
-
-            return redirect()->back()->with('success', 'Listing reported successfully');
+            return redirect('/')->with('message', $listing->title . ' reported successfully! Will be verified by Admin');
         }
     }
 

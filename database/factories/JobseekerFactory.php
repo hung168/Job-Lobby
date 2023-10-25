@@ -27,7 +27,7 @@ class JobseekerFactory extends Factory
             'gender' => fake()->randomElement(['Male', 'Female']),
             'nationality' => fake()->country,
             'email' => fake()->unique()->safeEmail,
-            'telephone' => fake()->phoneNumber,
+            'telephone' => '01' . fake()->regexify('[2-9]{8}'),
             'field_of_major' => fake()->word,
             'education_level' => fake()->randomElement(['High School', 'Bachelor', 'Master', 'PhD']),
         ];
