@@ -19,10 +19,12 @@ class JobseekerFactory extends Factory
      */
     public function definition(): array
     {
+        $state = 'Kuala Lumpur';
+
         return [
             'jobseeker_profile_pic' => 'images/jobseeker.png',
             'name' => fake()->name,
-            'address' => fake()->streetAddress . ', ' . fake()->city . ',Kuala Lumpur, ' . fake()->randomElement(['43000', '50000', '60000']) . ', Malaysia',
+            'address' => fake()->streetAddress . ',' . fake()->city . ',' . $state . ',' . fake()->randomElement(['43000', '50000', '60000']) . ',Malaysia',
             'date_of_birth' => fake()->date,
             'gender' => fake()->randomElement(['Male', 'Female']),
             'nationality' => fake()->country,

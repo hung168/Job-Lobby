@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             // Create Address record
-            $addressParts = explode(', ', $employer->address);
+            $addressParts = explode(',', $employer->address);
             Address::create([
                 'user_id' => $employer->user_id,
                 'address' => $employer->address,
@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             // Create Address record
-            $addressParts = explode(', ', $jobseeker->address);
+            $addressParts = explode(',', $jobseeker->address);
             Address::create([
                 'user_id' => $jobseeker->user_id,
                 'address' => $jobseeker->address,
