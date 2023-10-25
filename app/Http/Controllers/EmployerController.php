@@ -178,7 +178,7 @@ class EmployerController extends Controller
             'function_title' => 'required|string',
             'company_name' => 'required|string',
             'company_industry' => 'required|string',
-            'company_contact_number' => 'required|numeric|regex:/^[0-9+-\s()]*$/|min:10',
+            'company_contact_number' => 'required|numeric|regex:/^[0-9+\-\s()]*$/|min:10',
             'company_overview' => 'required|string',
             'company_registration_number' => 'required|integer',
             'company_website' => 'nullable|url',

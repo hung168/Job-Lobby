@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('job_description')->nullable();
             $table->timestamps();
     
-            $table->foreign('job_seeker_id')->references('user_id')->on('job_seekers')->onDelete('cascade');
+            $table->foreign('job_seeker_id')->references('user_id')->on('jobseekers')->onDelete('cascade');
         });
     }
 
