@@ -12,7 +12,10 @@ use App\Models\EmpRating;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +24,48 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        // Store images into storage 
+        // Path to the directory where your images are in the public directory
+        $imageDirectory = public_path('images');
+
+        // Path where you want to store the images in the storage directory
+        $storageDirectory = public_path('storage/images');
+
+        // Ensure the storage directory exists
+        File::makeDirectory($storageDirectory, 0755, true, true);
+
+        // List of image file names in the public directory
+        $imageFiles = File::files($imageDirectory);
+
+        foreach ($imageFiles as $imageFile) {
+            // Get the filename of the image
+            $fileName = $imageFile->getFilename();
+
+            // Copy the image from public to the storage directory
+            File::copy($imageDirectory . '/' . $fileName, $storageDirectory . '/' . $fileName);
+        }
+
+        // Path to the directory where your images are in the public directory
+        $imageDirectory2 = public_path('logos');
+
+        // Path where you want to store the images in the storage directory
+        $storageDirectory2 = public_path('storage/logos');
+
+        // Ensure the storage directory exists
+        File::makeDirectory($storageDirectory2, 0755, true, true);
+
+        // List of image file names in the public directory
+        $imageFiles2 = File::files($imageDirectory2);
+
+        foreach ($imageFiles2 as $imageFile) {
+            // Get the filename of the image
+            $fileName = $imageFile->getFilename();
+
+            // Copy the image from public to the storage directory
+            File::copy($imageDirectory2 . '/' . $fileName, $storageDirectory2 . '/' . $fileName);
+        }
+
         // Create 10 users (either Employer or Job Seekers)
         User::factory(10)->create();
 
