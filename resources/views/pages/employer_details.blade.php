@@ -89,37 +89,40 @@
                         @endif
                 </dl>
             </div><br>
-            @if(auth()->user()->id !== $employer->user_id)
-            <div class="ratings-and-reviews">
-                <dt class="text-sm font-medium leading-6 text-gray-900">Update Review (Old review will be replaced)</dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    <form method="POST" action="/employer/rating/{{ $employer->id }}">
-                        @csrf
-                        <input type="hidden" name="rating_ids[]" value=""> <!-- Hidden input for rating ID -->
-                        <div class="star-rating">
-                            <input type="radio" id="star5" name="rating" value="5">
-                            <label for="star5" title="5 stars"><span class="star-number">5</span></label>
-                            <input type="radio" id="star4" name="rating" value="4">
-                            <label for="star4" title="4 stars"><span class="star-number">4</span></label>
-                            <input type="radio" id="star3" name="rating" value="3">
-                            <label for="star3" title="3 stars"><span class="star-number">3</span></label>
-                            <input type="radio" id="star2" name="rating" value="2">
-                            <label for="star2" title="2 stars"><span class="star-number">2</span></label>
-                            <input type="radio" id="star1" name="rating" value="1">
-                            <label for="star1" title="1 star"><span class="star-number">1</span></label>
-                        </div>
-                        @error('rating')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                        <textarea name="comments" placeholder="comments" class="border border-gray-200 rounded p-2 w-full"></textarea>
-                        @error('comments')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                        <button class="remove-rating-and-review mt-2 bg-red-500 text-white rounded px-3 py-1 text-sm"
-                            type="submit">Save</button>
-                    </form>
-                </dd>
-            </div>
+            @if (auth()->user()->id !== $employer->user_id)
+                <div class="ratings-and-reviews">
+                    <dt class="text-sm font-medium leading-6 text-gray-900">Update Review (Old review will be replaced)
+                    </dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <form method="POST" action="/employer/rating/{{ $employer->id }}">
+                            @csrf
+                            <input type="hidden" name="rating_ids[]" value="">
+                            <!-- Hidden input for rating ID -->
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5" title="5 stars"><span class="star-number">5</span></label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4" title="4 stars"><span class="star-number">4</span></label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3" title="3 stars"><span class="star-number">3</span></label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2" title="2 stars"><span class="star-number">2</span></label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1" title="1 star"><span class="star-number">1</span></label>
+                            </div>
+                            @error('rating')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                            <textarea name="comments" placeholder="comments" class="border border-gray-200 rounded p-2 w-full"></textarea>
+                            @error('comments')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                            <button
+                                class="remove-rating-and-review mt-2 bg-red-500 text-white rounded px-3 py-1 text-sm"
+                                type="submit">Save</button>
+                        </form>
+                    </dd>
+                </div>
             @endif
             <div class="sm:col-span-6 text-center">
                 <a href="/employers" class="bg-theme-color text-white font-semibold rounded-md py-2 px-4">Back</a>

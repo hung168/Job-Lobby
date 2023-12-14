@@ -8,7 +8,7 @@
 
             <div class="z-10">
                 <h1 class="text-8xl font-bold uppercase text-white">
-                    Job<span class="text-black">Lobby</span>
+                    JOB<span class="text-black">BY</span>
                 </h1>
                 <p class="text-2xl text-white font-bold my-4">
                     Empowering Employers, Empowering Talent. Your Success, Our Passion

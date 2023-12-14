@@ -282,33 +282,38 @@ class EmployerController extends Controller
     public function reviewStore(Request $request, $id)
     {
         $user = auth()->user();
-        $employer = Employer::find($id);
-        $this->validate($request, [
-            'rating' => 'required|max:5',
-            'comments' => 'required|string|max:255',
-        ]);
-        $existingReview = EmpRating::where([
-            ['rateable_id', $user->id],
-            ['user_id', $employer->user_id]
-        ])->first();
-
-        if ($existingReview) {
-            $existingReview->update([
-                'rating' => $request->rating,
-                'comments' => $request->comments,
+        if ($user && $user->user_type === 'Job Seeker') {
+            $employer = Employer::find($id);
+            $this->validate($request, [
+                'rating' => 'required|max:5',
+                'comments' => 'required|string|max:255',
             ]);
+            $existingReview = EmpRating::where([
+                ['rateable_id', $user->id],
+                ['user_id', $employer->user_id]
+            ])->first();
+
+            if ($existingReview) {
+                $existingReview->update([
+                    'rating' => $request->rating,
+                    'comments' => $request->comments,
+                ]);
+            } else {
+                $review = new EmpRating();
+                $review->user_id = $employer->user_id; //employer id from url
+                $review->rateable_id = $user->id;
+                $review->rateable_type = $user->user_type;
+                $review->rating = $request->rating;
+                $review->comments = $request->comments;
+                $review->save();
+            }
+            $user = User::find($employer->user_id);
+            $user->notify(new DatabaseNotification('New Review Added to Your Profile', 'An user had rate and review your profile'));
+            return redirect()->back()->with('message', 'Your review has been submitted Successfully');
         } else {
-            $review = new EmpRating();
-            $review->user_id = $employer->user_id; //employer id from url
-            $review->rateable_id = $user->id;
-            $review->rateable_type = $user->user_type;
-            $review->rating = $request->rating;
-            $review->comments = $request->comments;
-            $review->save();
+            return redirect()->back()->with('message', 'This feature is for Job Seekers only');
         }
-        $user = User::find($employer->user_id);
-        $user->notify(new DatabaseNotification('New Review Added to Your Profile', 'An user had rate and review your profile'));
-        return redirect()->back()->with('flash_msg_success', 'Your review has been submitted Successfully,');
+
     }
 
 }
